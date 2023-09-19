@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        match: /^[a-zA-Z0-9_\.]$/
+        match: /^[a-zA-Z0-9_\.]+$/,
+        unique: true
     },
     password: {
         type: String,
@@ -15,11 +16,18 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        match: /^[\w-\.!#\$&'*\+=?\^`\{\}|~\/]+@([\w-]+\.)+[\w-]{2,}$/
+        match: /^[\w-\.!#\$&'*\+=?\^`\{\}|~\/]+@([\w-]+\.)+[\w-]{2,}$/,
+        unique: true
     },
-
+    bio: {
+        type: String,
+        maxLength: 300
+    },
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    conversations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conversation' }]
+}, {
     methods: {
-        compareHashedPassword: function (clearTextPassword) {
+        compareHashedPassword (clearTextPassword) {
             return bcrypt.compareSync(clearTextPassword, this.password);
         }
     }
