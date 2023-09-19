@@ -16,6 +16,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         match: /^[\w-\.!#\$&'*\+=?\^`\{\}|~\/]+@([\w-]+\.)+[\w-]{2,}$/
+    },
+
+    methods: {
+        compareHashedPassword: function (clearTextPassword) {
+            return bcrypt.compareSync(clearTextPassword, this.password);
+        }
     }
 });
 
