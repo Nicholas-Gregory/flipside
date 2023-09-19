@@ -6,6 +6,7 @@ const {
     GraphQLInt,
     GraphQLScalarType
 } = require('graphql')
+const mongoose = require('mongoose');
 
 const models = require('../models')
 const types = require('./types')
@@ -16,6 +17,10 @@ const query = new GraphQLObjectType({
         users: {
             type: new GraphQLList(types.user),
             resolve: async () => await models.User.find({})
+        },
+        conversations: {
+            type: new GraphQLList(types.conversation),
+            resolve: async () => await models.Conversation.find({})
         }
     })
 });
@@ -49,6 +54,59 @@ const mutation = new GraphQLObjectType({
                 await user.save();
 
                 return user;
+            }
+        },
+        addConversation: {
+            type: types.conversation,
+            args: {
+                title: {
+                    type: GraphQLString
+                },
+                participantIds: {
+                    type: new GraphQLList(GraphQLString)
+                },
+                remarkIds: {
+                    type: new GraphQLList(GraphQLString)
+                }
+            },
+            resolve: async (_, { title, participantIds, remarkIds }) => {
+                const conversation = new models.Conversation({ 
+                    title,
+                    participants: (participantIds || [])
+                    .map(id => new mongoose.Types.ObjectId(id)),
+                    remarks: (remarkIds || [])
+                    .map(id => new mongoose.Types.ObjectId(id))
+                });
+                await conversation.save();
+
+                return conversation;
+            }
+        },
+        addRemark: {
+            type: types.remark,
+            args: {
+                conversationId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                body: {
+                    type: new GraphQLNonNull(GraphQLString),
+                },
+                authorId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, { conversationId, body, authorId }) => {
+                const remark = new models.Remark({ 
+                    body, 
+                    author: authorId
+                });
+                await remark.save();
+                const conversation = await models.Conversation.findById(conversationId);
+
+                conversation.remarks.push(remark._id);
+                await conversation.save();
+
+                return remark;
             }
         }
     })

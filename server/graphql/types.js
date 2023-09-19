@@ -49,6 +49,10 @@ const remark = new GraphQLObjectType({
         id: {
             type: GraphQLString
         },
+        author: {
+            type: user,
+            resolve: async remark => await models.User.findById(remark.author)
+        },
         body: {
             type: GraphQLString
         },
@@ -74,15 +78,18 @@ const conversation = new GraphQLObjectType({
             type: GraphQLString
         },
         participants: {
-            type: new GraphQLList(user)
+            type: new GraphQLList(user),
+            resolve: async conversation => (await models.Conversation.findById(conversation.id)
+            .populate('participants'))
+            .participants
         },
         title: {
             type: GraphQLString
         },
         remarks: {
             type: new GraphQLList(remark),
-            resolve: async conversation => (await models.Conversation.findById(conversation.id))
-            .populate('remarks')
+            resolve: async conversation => (await models.Conversation.findById(conversation.id)
+            .populate('remarks'))
             .remarks
         }
     })
