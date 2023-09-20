@@ -31,6 +31,7 @@ const remarkSchema = new Schema({
     comments: [commentSchema],
     quote: { type: mongoose.Schema.Types.ObjectId, ref: 'Remark' },
     citations: [citationSchema],
+    conversation: { type: mongoose.Schema.Types.ObjectId, ref: 'Conversation' },
     likes: Number
 });
 

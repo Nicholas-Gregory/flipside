@@ -98,6 +98,7 @@ const mutation = new GraphQLObjectType({
                 const remark = new models.Remark({ 
                     body, 
                     author: authorId,
+                    conversation: conversationId,
                     quote: quotedRemarkId 
                     ? await models.Remark.findById(quotedRemarkId)
                     : null

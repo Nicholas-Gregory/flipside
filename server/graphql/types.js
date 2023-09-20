@@ -49,6 +49,10 @@ const remark = new GraphQLObjectType({
         id: {
             type: GraphQLString
         },
+        conversation: {
+            type: conversation,
+            resolve: async remark => await models.Conversation.findById(remark.conversation)
+        },
         author: {
             type: user,
             resolve: async remark => await models.User.findById(remark.author)
