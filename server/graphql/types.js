@@ -46,6 +46,10 @@ const citation = new GraphQLObjectType({
         },
         link: {
             type: GraphQLString
+        },
+        remark: {
+            type: remark,
+            resolve: async citation => citation.parent()
         }
     })
 });
