@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Schema.Types;
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
@@ -23,10 +24,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         maxLength: 300
     },
-    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    incomingFriendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    outgoingFriendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    conversations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conversation' }]
+    friends: [{ type: ObjectId, ref: 'User' }],
+    incomingFriendRequests: [{ type: ObjectId, ref: 'User' }],
+    outgoingFriendRequests: [{ type: ObjectId, ref: 'User' }],
+    conversations: [{ type: ObjectId, ref: 'Conversation' }]
 }, {
     methods: {
         compareHashedPassword (clearTextPassword) {

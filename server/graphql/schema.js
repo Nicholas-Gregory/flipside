@@ -96,6 +96,28 @@ const mutation = new GraphQLObjectType({
                 return [user, friend];
             }
         },
+        removeFriendRequest: {
+            type: new GraphQLList(types.user),
+            args: {
+                userId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                friendId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, { userId, friendId }) => {
+                const user = await models.User.findById(userId);
+                const friend = await models.User.findById(friendId);
+
+                user.outgoingFriendRequests.pull(new mongoose.Types.ObjectId(friendId));
+                friend.incomingFriendRequests.pull(new mongoose.Types.ObjectId(userId));
+                await user.save();
+                await friend.save();
+
+                return [user, friend];
+            }
+        },
         addFriend: {
             type: new GraphQLList(types.user),
             args: {
@@ -118,6 +140,28 @@ const mutation = new GraphQLObjectType({
                 friend.incomingFriendRequests.pull(new mongoose.Types.ObjectId(userId));
                 friend.outgoingFriendRequests.pull(new mongoose.Types.ObjectId(userId));
                 
+                await user.save();
+                await friend.save();
+
+                return [user, friend];
+            }
+        },
+        removeFriend: {
+            type: new GraphQLList(types.user),
+                args: {
+                    userId: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    },
+                    friendId: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    }
+                },
+            resolve: async (_, { userId, friendId }) => {
+                const user = await models.User.findById(userId);
+                const friend = await models.User.findById(friendId);
+
+                user.friends.pull(friendId);
+                friend.friends.pull(userId);
                 await user.save();
                 await friend.save();
 
