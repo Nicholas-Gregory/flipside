@@ -123,5 +123,6 @@ const user = new GraphQLObjectType({
 });
 
 module.exports = {
-    user, conversation, remark
+    user, conversation, remark,
+    citation, comment
 }

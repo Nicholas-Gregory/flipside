@@ -3,8 +3,6 @@ const {
     GraphQLList,
     GraphQLString,
     GraphQLNonNull,
-    GraphQLInt,
-    GraphQLScalarType
 } = require('graphql')
 const mongoose = require('mongoose');
 
@@ -107,6 +105,34 @@ const mutation = new GraphQLObjectType({
                 await conversation.save();
 
                 return remark;
+            }
+        },
+        addCitation: {
+            type: types.citation,
+            args: {
+                remarkId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                text: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                body: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                link: { type: GraphQLString }
+            },
+            resolve: async (_, { remarkId, text, body, link }) => {
+                const remark = await models.Remark.findById(remarkId);
+                const citations = remark.citations;
+
+                citations.push({
+                    text,
+                    body,
+                    link
+                });
+                await remark.save();
+
+                return citations[citations.length - 1];
             }
         }
     })

@@ -36,4 +36,4 @@ const remarkSchema = new Schema({
 
 const Remark = mongoose.model('Remark', remarkSchema);
 
-module.exports = Remark
+module.exports = Remark;
