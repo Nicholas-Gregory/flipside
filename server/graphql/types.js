@@ -60,7 +60,8 @@ const remark = new GraphQLObjectType({
             type: new GraphQLList(comment)
         },
         quote: {
-            type: remark
+            type: remark,
+            resolve: async remark => await models.Remark.findById(remark.quote)
         },
         citations: {
             type: new GraphQLList(citation)

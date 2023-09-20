@@ -91,12 +91,16 @@ const mutation = new GraphQLObjectType({
                 },
                 authorId: {
                     type: new GraphQLNonNull(GraphQLString)
-                }
+                },
+                quotedRemarkId: { type: GraphQLString }
             },
-            resolve: async (_, { conversationId, body, authorId }) => {
+            resolve: async (_, { conversationId, body, authorId, quotedRemarkId }) => {
                 const remark = new models.Remark({ 
                     body, 
-                    author: authorId
+                    author: authorId,
+                    quote: quotedRemarkId 
+                    ? await models.Remark.findById(quotedRemarkId)
+                    : null
                 });
                 await remark.save();
                 const conversation = await models.Conversation.findById(conversationId);
