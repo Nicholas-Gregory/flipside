@@ -55,6 +55,25 @@ const mutation = new GraphQLObjectType({
                 return user;
             }
         },
+        updateBio: {
+            type: types.user,
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                bio: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, { id, bio }) => {
+                const user = await models.User.findById(id);
+                
+                user.bio = bio;
+                await user.save();
+
+                return user;
+            }
+        },
         addConversation: {
             type: types.conversation,
             args: {
