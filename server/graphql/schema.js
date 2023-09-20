@@ -100,6 +100,34 @@ const mutation = new GraphQLObjectType({
                 return conversation;
             }
         },
+        addUsersToConversation: {
+            type: types.conversation,
+            args: {
+                conversationId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                userIds: {
+                    type: new GraphQLNonNull(new GraphQLList(GraphQLString))
+                }
+            },
+            resolve: async (_, { conversationId, userIds }) => {
+                const conversation = await models.Conversation.findById(conversationId);
+                const users = [];
+
+                for (let id of userIds) {
+                    conversation.participants.addToSet(new mongoose.Types.ObjectId(id))
+                    users.push(await models.User.findById(id))
+                }
+                await conversation.save();
+
+                for (let user of users) {
+                    user.conversations.addToSet(conversation._id);
+                    await user.save();
+                }
+
+                return conversation;
+            }
+        },
         addRemark: {
             type: types.remark,
             args: {

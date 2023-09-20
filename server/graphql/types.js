@@ -136,7 +136,10 @@ const user = new GraphQLObjectType({
             .friends
         },
         conversations: {
-            type: new GraphQLList(conversation)
+            type: new GraphQLList(conversation),
+            resolve: async user => (await models.User.findById(user._id)
+            .populate('conversations'))
+            .conversations
         }
     })
 });
