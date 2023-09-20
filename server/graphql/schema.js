@@ -3,6 +3,7 @@ const {
     GraphQLList,
     GraphQLString,
     GraphQLNonNull,
+    GraphQLInt
 } = require('graphql')
 const mongoose = require('mongoose');
 
@@ -138,6 +139,44 @@ const mutation = new GraphQLObjectType({
                 await remark.save();
 
                 return citations[citations.length - 1];
+            }
+        },
+        addComment: {
+            type: types.comment,
+            args: {
+                remarkId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                body: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                parentId: {
+                    type: GraphQLString
+                }
+            },
+            resolve: async (_, { remarkId, body, parentId }) => {
+                const remark = await models.Remark.findById(remarkId);
+                const comment = new models.Comment({
+                    remark: remarkId,
+                    body,
+                    parent: parentId
+                });
+                await comment.save();
+                const comments = remark.comments;
+
+                if (parentId) {
+                    const parent = await models.Comment.findById(parentId);
+
+                    parent.replies.push(new mongoose.Types.ObjectId(comment._id));
+                    await parent.save();
+
+                    return comment;
+                }
+
+                comments.push(new mongoose.Types.ObjectId(comment._id));
+                await remark.save();
+
+                return comment;
             }
         }
     })

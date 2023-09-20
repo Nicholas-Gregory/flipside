@@ -4,6 +4,7 @@ const {
     GraphQLString,
     GraphQLList
 } = require('graphql');
+const { Types } = require('mongoose');
 
 const models = require('../models');
 
@@ -17,7 +18,13 @@ const comment = new GraphQLObjectType({
             type: GraphQLString
         },
         replies: {
-            type: new GraphQLList(comment)
+            type: new GraphQLList(comment),
+            resolve: async comment => (await models.Comment.findById(new Types.ObjectId(comment.id))
+            .populate('replies'))
+            .replies
+        },
+        parent: {
+            type: comment
         },
         likes: {
             type: GraphQLInt
@@ -61,7 +68,10 @@ const remark = new GraphQLObjectType({
             type: GraphQLString
         },
         comments: {
-            type: new GraphQLList(comment)
+            type: new GraphQLList(comment),
+            resolve: async remark => (await models.Remark.findById(remark.id)
+            .populate('comments'))
+            .comments
         },
         quote: {
             type: remark,

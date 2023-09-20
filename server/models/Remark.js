@@ -1,15 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const commentSchema = new Schema({
-    body: {
-        type: String,
-        required: true
-    },
-    replies: [this],
-    likes: Number
-});
-
 const citationSchema = new Schema({
     text: {
         type: String,
@@ -28,7 +19,7 @@ const remarkSchema = new Schema({
         type: String,
         required: true
     },
-    comments: [commentSchema],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
     quote: { type: mongoose.Schema.Types.ObjectId, ref: 'Remark' },
     citations: [citationSchema],
     conversation: { type: mongoose.Schema.Types.ObjectId, ref: 'Conversation' },
