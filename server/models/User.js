@@ -24,6 +24,8 @@ const userSchema = new mongoose.Schema({
         maxLength: 300
     },
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    incomingFriendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    outgoingFriendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     conversations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conversation' }]
 }, {
     methods: {

@@ -135,6 +135,18 @@ const user = new GraphQLObjectType({
             .populate('friends'))
             .friends
         },
+        incomingFriendRequests: {
+            type: new GraphQLList(user),
+            resolve: async user => (await models.User.findById(user._id)
+            .populate('incomingFriendRequests'))
+            .incomingFriendRequests
+        },
+        outgoingFriendRequests: {
+            type: new GraphQLList(user),
+            resolve: async user => (await models.User.findById(user._id)
+            .populate('outgoingFriendRequests'))
+            .outgoingFriendRequests
+        },
         conversations: {
             type: new GraphQLList(conversation),
             resolve: async user => (await models.User.findById(user._id)

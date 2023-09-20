@@ -74,6 +74,56 @@ const mutation = new GraphQLObjectType({
                 return user;
             }
         },
+        addFriendRequest: {
+            type: new GraphQLList(types.user),
+            args: {
+                userId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                friendId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, { userId, friendId }) => {
+                const user = await models.User.findById(userId);
+                const friend = await models.User.findById(friendId);
+
+                friend.incomingFriendRequests.push(userId);
+                user.outgoingFriendRequests.push(friendId);
+                await friend.save();
+                await user.save();
+
+                return [user, friend];
+            }
+        },
+        addFriend: {
+            type: new GraphQLList(types.user),
+            args: {
+                userId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                friendId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, { userId, friendId }) => {
+                const user = await models.User.findById(userId);
+                const friend = await models.User.findById(friendId);
+
+                user.friends.push(friendId);
+                friend.friends.push(userId);
+
+                user.incomingFriendRequests.pull(new mongoose.Types.ObjectId(friendId));
+                user.outgoingFriendRequests.pull(new mongoose.Types.ObjectId(friendId));
+                friend.incomingFriendRequests.pull(new mongoose.Types.ObjectId(userId));
+                friend.outgoingFriendRequests.pull(new mongoose.Types.ObjectId(userId));
+                
+                await user.save();
+                await friend.save();
+
+                return [user, friend];
+            }
+        },
         addConversation: {
             type: types.conversation,
             args: {
