@@ -16,10 +16,10 @@ export default function LoginForm({ onSubmit }) {
     return (
         <>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username or Email</label>
+                <label htmlFor="usernameOrEmail">Username or Email</label>
                 <input 
                     type="text"
-                    name="username"
+                    name="usernameOrEmail"
                     placeholder="Enter Username or Email"
                     value={usernameOrEmailInput}
                     onChange={e => setUsernameOrEmailInput(e.target.value)}

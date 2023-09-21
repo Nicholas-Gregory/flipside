@@ -1,20 +1,15 @@
-import CreateAccountForm from "./components/CreateAccountForm/CreateAccountForm";
-import LoginForm from "./components/LoginForm/LoginForm";
+import AuthenticateUser from "./components/AuthenticateUser/AuthenticateUser";
+
 
 function App() {
-  
-  function handleLoginSubmit(usernameOrEmail, password) {
-    console.log(usernameOrEmail, password);
-  }
 
-  function handleCreateAccountSubmit(username) {
+  function handleAuth() {
     
   }
 
   return (
     <>
-      <LoginForm onSubmit={handleLoginSubmit} />
-      <CreateAccountForm onSubmit={handleCreateAccountSubmit} />
+      <AuthenticateUser onAuth={handleAuth}/>
     </>
   );
 }

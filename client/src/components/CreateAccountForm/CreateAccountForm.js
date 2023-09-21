@@ -54,6 +54,7 @@ export default function CreateAccountForm({ onSubmit }) {
                     value={emailInput}
                     onChange={e => setEmailInput(e.target.value)}
                 />
+            <button>Create Account</button>
             </form>
             {passwordInput !== confirmPasswordInput && <p><i>Passwords do not match</i></p>}
             {emailInput !== '' && !/^[\w-.!#$&'*+=?^`{}|~/]+@([\w-]+\.)+[\w-]{2,}$/.test(emailInput) && <p><i>Not a valid email address</i></p>}
