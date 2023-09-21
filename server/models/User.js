@@ -28,13 +28,11 @@ const userSchema = new mongoose.Schema({
     incomingFriendRequests: [{ type: ObjectId, ref: 'User' }],
     outgoingFriendRequests: [{ type: ObjectId, ref: 'User' }],
     conversations: [{ type: ObjectId, ref: 'Conversation' }]
-}, {
-    methods: {
-        compareHashedPassword (clearTextPassword) {
-            return bcrypt.compareSync(clearTextPassword, this.password);
-        }
-    }
 });
+
+userSchema.methods.compareHashedPassword = function(clearTextPassword) {
+    return bcrypt.compareSync(clearTextPassword, this.password);
+}
 
 const User = mongoose.model('User', userSchema);
 

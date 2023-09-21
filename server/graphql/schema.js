@@ -6,9 +6,13 @@ const {
     GraphQLInt
 } = require('graphql')
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
-const models = require('../models')
-const types = require('./types')
+const models = require('../models');
+const types = require('./types');
+
+const compareHashedPassword = (clearTextPassword, user) => bcrypt.compareSync(clearTextPassword, user.password);
 
 const query = new GraphQLObjectType({
     name: 'rootQuery',
@@ -20,6 +24,32 @@ const query = new GraphQLObjectType({
         conversations: {
             type: new GraphQLList(types.conversation),
             resolve: async () => await models.Conversation.find({})
+        },
+        login: {
+            type: GraphQLString,
+            args: {
+                username: { type: GraphQLString },
+                email: { type: GraphQLString },
+                password: { 
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, { username, email, password }) => {
+                const user = await models.User.findOne({ username });
+
+                if (!user) {
+                    user = await models.User.findOne({ email });
+                }
+                if (!user) {
+                    return "Invalid username/email"
+                }
+
+                if (!compareHashedPassword(password, user)) {
+                    return "Incorrect password"
+                }
+
+                return jwt.sign({ userId: user._id}, process.env.JWT_SECRET);
+            }
         }
     })
 });

@@ -2,10 +2,30 @@ import { useState } from 'react';
 
 import CreateAccountForm from "../CreateAccountForm/CreateAccountForm";
 import LoginForm from "../LoginForm/LoginForm";
+
 import { query } from "../../utils";
 
 export default function AuthenticateUser({ onAuth }) {
     const [errors, setErrors] = useState(null);
+
+    async function login(username, email, password) {
+        const response = await query(`
+            query Login($username: String, $email: String, $password: String!) {
+                login(username: $username, email: $email, password: $password)
+            }
+        `, {
+            username, email, password
+        });
+
+        if (response.errors) {
+            setErrors(response.errors);
+            return;
+        } else {
+            setErrors(null);
+        }
+
+        return response.data.login;
+    }
 
     async function handleCreateAccountSubmit(username, password, email) {
         const results = await query(`
@@ -25,7 +45,8 @@ export default function AuthenticateUser({ onAuth }) {
             setErrors(null);
         }
 
-        // Log in the user
+        const token = await login(username, email, password);
+        console.log(token);
     }
 
     function handleLoginSubmit(usernameOrEmail, password) {
