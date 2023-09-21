@@ -6,10 +6,11 @@ export default function LoginForm({ onSubmit }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        setUsernameOrEmailInput('');
-        setPasswordInput('');
 
         onSubmit(usernameOrEmailInput, passwordInput);
+
+        setUsernameOrEmailInput('');
+        setPasswordInput('');
     }
 
     return (
@@ -25,7 +26,7 @@ export default function LoginForm({ onSubmit }) {
                 />
                 <label htmlFor='password'>Password</label>
                 <input 
-                    type="text"
+                    type="password"
                     name='password'
                     placeholder='Enter Password'
                     value={passwordInput}
