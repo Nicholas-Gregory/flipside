@@ -46,11 +46,12 @@ export default function AuthenticateUser({ onAuth }) {
         }
 
         const token = await login(username, email, password);
-        console.log(token);
+        onAuth(token);
     }
 
-    function handleLoginSubmit(usernameOrEmail, password) {
-        
+    async function handleLoginSubmit(usernameOrEmail, password) {
+        const token = await login(usernameOrEmail, usernameOrEmail, password);
+        onAuth(token);
     }
 
     return (

@@ -3,7 +3,8 @@ const {
     GraphQLList,
     GraphQLString,
     GraphQLNonNull,
-    GraphQLInt
+    GraphQLInt,
+    GraphQLBoolean
 } = require('graphql')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -35,7 +36,7 @@ const query = new GraphQLObjectType({
                 }
             },
             resolve: async (_, { username, email, password }) => {
-                const user = await models.User.findOne({ username });
+                let user = await models.User.findOne({ username });
 
                 if (!user) {
                     user = await models.User.findOne({ email });
@@ -49,6 +50,22 @@ const query = new GraphQLObjectType({
                 }
 
                 return jwt.sign({ userId: user._id}, process.env.JWT_SECRET);
+            }
+        },
+        authorize: {
+            type: GraphQLBoolean,
+            args: {
+                token: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: (_, { token }) =>  {
+                try {
+                    jwt.verify(token, process.env.JWT_SECRET);
+                    return true;
+                } catch (err) {
+                    return false;
+                }
             }
         }
     })

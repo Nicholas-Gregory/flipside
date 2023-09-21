@@ -1,9 +1,13 @@
+import { useState } from "react";
+
 import AuthenticateUser from "./components/AuthenticateUser/AuthenticateUser";
 
+import { auth } from "./utils";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  function handleAuth() {
+  async function handleAuth(token) {
     
   }
 
