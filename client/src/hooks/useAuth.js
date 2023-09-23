@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { auth, query } from "../utils";
 
 export default function useAuth() {
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(null);
     const [errors, setErrors] = useState(null);
 
     async function authorize() {
@@ -29,8 +29,10 @@ export default function useAuth() {
             setErrors(null);
         }
 
-        localStorage.setItem('flipside.authToken', response.data.login);
-        setLoggedIn(true);
+        const token = response.data.login;
+
+        localStorage.setItem('flipside.authToken', token);
+        setLoggedIn(await auth(token));
     }
 
     async function createAccount(username, email, password) {

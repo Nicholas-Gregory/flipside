@@ -53,20 +53,13 @@ const query = new GraphQLObjectType({
             }
         },
         authorize: {
-            type: GraphQLBoolean,
+            type: GraphQLString,
             args: {
                 token: {
                     type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: (_, { token }) =>  {
-                try {
-                    jwt.verify(token, process.env.JWT_SECRET);
-                    return true;
-                } catch (err) {
-                    return false;
-                }
-            }
+            resolve: (_, { token }) => jwt.verify(token, process.env.JWT_SECRET).userId
         }
     })
 });

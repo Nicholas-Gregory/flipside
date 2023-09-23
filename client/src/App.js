@@ -13,7 +13,7 @@ function App() {
         authenticate={authenticate}
         createAccount={createAccount}
         errors={errors}
-      /> : "You are logged in!"}
+      /> : loggedIn}
     </>
   );
 }
