@@ -5,11 +5,13 @@ export default function useAuth() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [errors, setErrors] = useState(null);
 
-    useEffect(() => {
+    async function authorize() {
         const token = localStorage.getItem("flipside.authToken");
 
-        if (token) (async () => setLoggedIn(await auth(token)))();
-    }, []);
+        if (token) setLoggedIn(await auth(token));
+    }
+
+    useEffect(() => { authorize() }, []);
 
     async function authenticate(username, email, password) {
         const response = await query(`
@@ -31,5 +33,32 @@ export default function useAuth() {
         setLoggedIn(true);
     }
 
-    return { loggedIn, authenticate, errors };
+    async function createAccount(username, email, password) {
+        const response = await query(`
+        mutation AddUser($username: String!, $email: String!, $password: String!) {
+            addUser(username: $username, email: $email, password: $password) {
+                id
+            }
+        }
+        `, {
+            username, email, password
+        });
+
+        if (response.errors) {
+            setErrors(response.errors);
+            return
+        } else {
+            setErrors(null);
+        }
+
+        await authenticate(username, email, password);
+    }
+
+    return { 
+        loggedIn, 
+        authenticate, 
+        authorize, 
+        createAccount, 
+        errors 
+    };
 }

@@ -1,11 +1,9 @@
-import { useState } from "react";
-
 import AuthenticateUser from "./components/AuthenticateUser/AuthenticateUser";
 import Navbar from "./Navbar/Navbar";
 import useAuth from "./hooks/useAuth";
 
 function App() {
-  const { loggedIn, authenticate, errors } = useAuth();
+  const { loggedIn, authenticate, createAccount, errors } = useAuth();
 
   return (
     <>
@@ -13,6 +11,7 @@ function App() {
       {!loggedIn ? 
       <AuthenticateUser 
         authenticate={authenticate}
+        createAccount={createAccount}
         errors={errors}
       /> : "You are logged in!"}
     </>
