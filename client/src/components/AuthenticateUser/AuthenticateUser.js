@@ -2,11 +2,8 @@ import CreateAccountForm from "../CreateAccountForm/CreateAccountForm";
 import LoginForm from "../LoginForm/LoginForm";
 
 import { query } from "../../utils";
-import useAuth from '../../hooks/useAuth';
 
-export default function AuthenticateUser({ onAuth }) {
-    const { authenticate, errors } = useAuth();
-
+export default function AuthenticateUser({ authenticate, errors }) {
     async function handleCreateAccountSubmit(username, password, email) {
         const results = await query(`
             mutation AddUser($username: String!, $email: String!, $password: String!) {
@@ -19,12 +16,10 @@ export default function AuthenticateUser({ onAuth }) {
         });
 
         if (!results.errors) authenticate(username, email, password);
-        // onAuth()
     }
 
     async function handleLoginSubmit(usernameOrEmail, password) {
         authenticate(usernameOrEmail, usernameOrEmail, password);
-        // onAuth();
     }
 
     return (
