@@ -4,28 +4,10 @@ import CreateAccountForm from "../CreateAccountForm/CreateAccountForm";
 import LoginForm from "../LoginForm/LoginForm";
 
 import { query } from "../../utils";
+import useAuth from '../../hooks/useAuth';
 
 export default function AuthenticateUser({ onAuth }) {
-    const [errors, setErrors] = useState(null);
-
-    async function login(username, email, password) {
-        const response = await query(`
-            query Login($username: String, $email: String, $password: String!) {
-                login(username: $username, email: $email, password: $password)
-            }
-        `, {
-            username, email, password
-        });
-
-        if (response.errors) {
-            setErrors(response.errors);
-            return;
-        } else {
-            setErrors(null);
-        }
-
-        return response.data.login;
-    }
+    const { authenticate, errors } = useAuth();
 
     async function handleCreateAccountSubmit(username, password, email) {
         const results = await query(`
@@ -37,21 +19,14 @@ export default function AuthenticateUser({ onAuth }) {
         `, {
             username, password, email
         });
-        
-        if (results.errors) {
-            setErrors(results.errors);
-            return;
-        } else {
-            setErrors(null);
-        }
 
-        const token = await login(username, email, password);
-        onAuth(token);
+        authenticate(username, email, password);
+        onAuth()
     }
 
     async function handleLoginSubmit(usernameOrEmail, password) {
-        const token = await login(usernameOrEmail, usernameOrEmail, password);
-        onAuth(token);
+        authenticate(usernameOrEmail, usernameOrEmail, password);
+        onAuth();
     }
 
     return (

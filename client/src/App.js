@@ -1,19 +1,19 @@
 import { useState } from "react";
 
 import AuthenticateUser from "./components/AuthenticateUser/AuthenticateUser";
-
-import { auth } from "./utils";
+import Navbar from "./Navbar/Navbar";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  async function handleAuth(token) {
-    
+  function handleAuth() {
+    setLoggedIn(true);
   }
 
   return (
     <>
-      <AuthenticateUser onAuth={handleAuth}/>
+      <Navbar />
+      {!loggedIn ? <AuthenticateUser onAuth={handleAuth}/> : "You are logged in!"}
     </>
   );
 }
