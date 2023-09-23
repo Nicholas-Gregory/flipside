@@ -42,11 +42,11 @@ const query = new GraphQLObjectType({
                     user = await models.User.findOne({ email });
                 }
                 if (!user) {
-                    return "Invalid username/email"
+                    throw new Error("Invalid username/email");
                 }
 
                 if (!compareHashedPassword(password, user)) {
-                    return "Incorrect password"
+                    throw new Error("Incorrect password");
                 }
 
                 return jwt.sign({ userId: user._id}, process.env.JWT_SECRET);

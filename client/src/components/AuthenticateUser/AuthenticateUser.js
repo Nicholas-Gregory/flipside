@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import CreateAccountForm from "../CreateAccountForm/CreateAccountForm";
 import LoginForm from "../LoginForm/LoginForm";
 
@@ -20,13 +18,13 @@ export default function AuthenticateUser({ onAuth }) {
             username, password, email
         });
 
-        authenticate(username, email, password);
-        onAuth()
+        if (!results.errors) authenticate(username, email, password);
+        // onAuth()
     }
 
     async function handleLoginSubmit(usernameOrEmail, password) {
         authenticate(usernameOrEmail, usernameOrEmail, password);
-        onAuth();
+        // onAuth();
     }
 
     return (
