@@ -7,12 +7,6 @@ const query = async (query, variables) => await (await fetch('/api', {
     })}
 )).json()
 
-const auth = async token => (await query(`
-    query Authorize($token: String!) {
-        authorize(token: $token)
-    }
-`, { token })).data.authorize;
-
 module.exports = {
-    query, auth
+    query
 }

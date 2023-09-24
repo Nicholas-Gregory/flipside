@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { auth, query } from "../utils";
+import { query } from "../utils";
 
 export default function useAuth() {
     const [loggedIn, setLoggedIn] = useState(null);
@@ -8,7 +8,21 @@ export default function useAuth() {
     async function authorize() {
         const token = localStorage.getItem("flipside.authToken");
 
-        if (token) setLoggedIn(await auth(token));
+        if (token) {
+            const response = await query(`
+            query Authorize($token: String!) {
+                authorize(token: $token)
+            }`, { token });
+
+            if (response.errors) {
+                setErrors(response.errors);
+                return
+            } else {
+                setErrors(null);
+            }
+
+            setLoggedIn(response.data.authorize);
+        }
     }
 
     useEffect(() => { authorize() }, []);
@@ -32,7 +46,7 @@ export default function useAuth() {
         const token = response.data.login;
 
         localStorage.setItem('flipside.authToken', token);
-        setLoggedIn(await auth(token));
+        await authorize(token);
     }
 
     async function createAccount(username, email, password) {
