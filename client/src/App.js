@@ -1,13 +1,28 @@
-import AuthenticateUser from "./components/AuthenticateUser/AuthenticateUser";
-import Navbar from "./Navbar/Navbar";
+import AuthenticateUser from "./components/AuthenticateUser";
+import Navbar from "./components/Navbar";
 import useAuth from "./hooks/useAuth";
 
+import './index.css';
+
 function App() {
-  const { loggedIn, authenticate, createAccount, errors } = useAuth();
+  const { 
+    loggedIn, 
+    authenticate, 
+    createAccount, 
+    logout, 
+    errors 
+  } = useAuth();
+
+  function handleNavbarClick(buttonId) {
+    if (buttonId === 'logout') logout();
+  }
 
   return (
     <>
-      <Navbar />
+      <Navbar 
+        loggedIn={loggedIn}
+        onClick={handleNavbarClick}
+      />
       {!loggedIn ? 
       <AuthenticateUser 
         authenticate={authenticate}

@@ -70,11 +70,17 @@ export default function useAuth() {
         await authenticate(username, email, password);
     }
 
+    function logout() {
+        localStorage.removeItem('flipside.authToken');
+        setLoggedIn(false);
+    }
+
     return { 
         loggedIn, 
         authenticate, 
         authorize, 
         createAccount, 
+        logout,
         errors 
     };
 }

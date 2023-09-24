@@ -1,0 +1,32 @@
+#nav {
+padding-left: 0%;
+}
+
+#nav li {
+display: inline;
+}
+
+.formContainer {
+    width: 60%;
+    padding: 10px;
+}
+
+.form .formTitle {
+width: 55%;
+margin: auto;
+}
+
+.form .formSubmitButton {
+    width: 10em;
+    display: block;
+    margin: auto;
+}
+
+.formItem {
+width: 50%;
+margin: auto;
+padding: 5px;
+}
+.formItem input {
+display: block;
+}
