@@ -6,8 +6,8 @@ export default function Dashboard({ loggedIn, currentPage }) {
     if (currentPage === 'browse') {
         return <BrowseConversations />
     } else if (currentPage === 'profile') {
-        return <Profile />
+        return <Profile loggedIn={loggedIn}/>
     } else if (currentPage === 'start') {
-        return <NewConversation />
+        return <NewConversation loggedIn={loggedIn}/>
     }
 }
