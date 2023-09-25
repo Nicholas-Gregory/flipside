@@ -31,3 +31,12 @@
 .formItem input {
     display: block;
 }
+
+#profileFlexContainer {
+    display: flex;
+}
+
+.profileDiv {
+    width: 50%;
+    margin: 10px;
+}
