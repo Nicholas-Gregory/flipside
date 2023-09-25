@@ -244,6 +244,12 @@ const mutation = new GraphQLObjectType({
                 });
                 await conversation.save();
 
+                for (let participantId of participantIds) {
+                    const user = await models.User.findById(participantId);
+                    user.conversations.push(conversation._id);
+                    await user.save();
+                }
+
                 return conversation;
             }
         },

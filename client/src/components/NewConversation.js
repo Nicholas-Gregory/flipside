@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { query } from '../utils';
 
-export default function NewConversation({ loggedIn }) {
+export default function NewConversation({ loggedIn, onCreate }) {
     const [titleInput, setTitleInput] = useState('');
     const [topicsInput, setTopicsInput] = useState('');
 
@@ -26,6 +26,8 @@ export default function NewConversation({ loggedIn }) {
             alert(response.errors[0].message);
             return;
         }
+
+        onCreate(response.data.addConversation.id);
     }
 
     return (

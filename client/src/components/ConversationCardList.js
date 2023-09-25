@@ -10,7 +10,7 @@ export default function ConversationCardList({ conversations }) {
                     <ul>
                         {conversation.topics.map(topic =>
                             <li>
-                                topic
+                                {topic}
                             </li>    
                         )} 
                     </ul>
@@ -20,7 +20,7 @@ export default function ConversationCardList({ conversations }) {
                     <ul>
                         {conversation.participants.map(participant =>
                             <li>
-                                participant.username
+                                {participant.username}
                             </li>    
                         )}
                     </ul>

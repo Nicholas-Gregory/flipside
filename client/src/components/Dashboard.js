@@ -57,6 +57,9 @@ export default function Dashboard({ loggedIn, currentPage }) {
                 updateBio={updateBio}
             />
     } else if (currentPage === 'start') {
-        return <NewConversation loggedIn={loggedIn}/>
+        return <NewConversation 
+                loggedIn={loggedIn}
+                onCreate={() => setBioFlip(!bioFlip)}
+               />
     }
 }
