@@ -1,19 +1,20 @@
 #nav {
-padding-left: 0%;
+    padding-left: 0%;
 }
 
 #nav li {
-display: inline;
+    display: inline;
 }
 
 .formContainer {
     width: 60%;
     padding: 10px;
+    margin: auto;
 }
 
 .form .formTitle {
-width: 55%;
-margin: auto;
+    width: 55%;
+    margin: auto;
 }
 
 .form .formSubmitButton {
@@ -23,10 +24,10 @@ margin: auto;
 }
 
 .formItem {
-width: 50%;
-margin: auto;
-padding: 5px;
+    width: 50%;
+    margin: auto;
+    padding: 5px;
 }
 .formItem input {
-display: block;
+    display: block;
 }
