@@ -27,6 +27,10 @@ function App() {
     }
   }
 
+  function handleSelectConversation() {
+    setCurrentPage('view');
+  }
+
   return (
     <>
       {loggedIn && <Navbar onClick={handleNavbarClick}/>}
@@ -35,7 +39,11 @@ function App() {
         authenticate={authenticate}
         createAccount={createAccount}
         errors={errors}
-      /> : <Dashboard loggedIn={loggedIn} currentPage={currentPage} />}
+      /> : <Dashboard 
+            loggedIn={loggedIn} 
+            currentPage={currentPage} 
+            onSelectConversation={handleSelectConversation}
+           />}
     </>
   );
 }

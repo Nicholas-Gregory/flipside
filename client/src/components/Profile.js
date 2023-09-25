@@ -5,7 +5,12 @@ import useAuth from '../hooks/useAuth';
 
 import ConversationCardList from './ConversationCardList';
 
-export default function Profile({ loggedIn, user, updateBio }) {
+export default function Profile({ 
+    loggedIn, 
+    user, 
+    updateBio,
+    onSelectConversation
+}) {
     const [editing, setEditing] = useState(false);
     const [editingBio, setEditingBio] = useState(null);
     const { authorize, errors } = useAuth();
@@ -23,6 +28,10 @@ export default function Profile({ loggedIn, user, updateBio }) {
         setEditing(false);
     }
 
+    function handleSelectConversation(id) {
+        onSelectConversation(id)
+    }
+
     return (
          <>{user && <>
             <h1>
@@ -33,7 +42,11 @@ export default function Profile({ loggedIn, user, updateBio }) {
                     <h2>
                         Conversations
                     </h2>
-                    {user.conversations.length > 0 ? <ConversationCardList conversations={user.conversations} /> : "This user is not involved in any conversations"}
+                    {user.conversations.length > 0 ? 
+                    <ConversationCardList 
+                        conversations={user.conversations} 
+                        onSelect={handleSelectConversation}
+                    /> : "This user is not involved in any conversations"}
                 </div>
                 <div className='profileDiv'>
                     <h2>

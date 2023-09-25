@@ -33,6 +33,13 @@ const query = new GraphQLObjectType({
             type: new GraphQLList(types.conversation),
             resolve: async () => await models.Conversation.find({})
         },
+        conversationById: {
+            type: types.conversation,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLString) }
+            },
+            resolve: async (_, { id }) => await models.Conversation.findById(id)
+        },
         login: {
             type: GraphQLString,
             args: {
