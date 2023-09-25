@@ -110,6 +110,9 @@ const conversation = new GraphQLObjectType({
             resolve: async conversation => (await models.Conversation.findById(conversation.id)
             .populate('remarks'))
             .remarks
+        },
+        topics: {
+            type: new GraphQLList(GraphQLString)
         }
     })
 });

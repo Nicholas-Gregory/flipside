@@ -105,14 +105,16 @@ const mutation = new GraphQLObjectType({
         updateBio: {
             type: types.user,
             args: {
-                id: {
+                bio: {
                     type: new GraphQLNonNull(GraphQLString)
                 },
-                bio: {
+                token: {
                     type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: async (_, { id, bio }) => {
+            resolve: async (_, { bio, token }) => {
+                const id = jwt.verify(token, process.env.JWT_SECRET).userId;
+
                 const user = await models.User.findById(id);
                 
                 user.bio = bio;

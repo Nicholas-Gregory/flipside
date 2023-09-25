@@ -23,6 +23,8 @@ export default function useAuth() {
 
             setLoggedIn(response.data.authorize);
         }
+
+        return token;
     }
 
     useEffect(() => { authorize() }, []);
