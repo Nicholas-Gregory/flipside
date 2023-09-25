@@ -228,15 +228,19 @@ const mutation = new GraphQLObjectType({
                 },
                 remarkIds: {
                     type: new GraphQLList(GraphQLString)
+                },
+                topics: {
+                    type: new GraphQLList(GraphQLString)
                 }
             },
-            resolve: async (_, { title, participantIds, remarkIds }) => {
+            resolve: async (_, { title, participantIds, remarkIds, topics }) => {
                 const conversation = new models.Conversation({ 
                     title,
                     participants: (participantIds || [])
                     .map(id => new mongoose.Types.ObjectId(id)),
                     remarks: (remarkIds || [])
-                    .map(id => new mongoose.Types.ObjectId(id))
+                    .map(id => new mongoose.Types.ObjectId(id)),
+                    topics
                 });
                 await conversation.save();
 
