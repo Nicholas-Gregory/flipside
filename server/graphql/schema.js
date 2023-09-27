@@ -114,13 +114,14 @@ const mutation = new GraphQLObjectType({
             args: {
                 bio: {
                     type: new GraphQLNonNull(GraphQLString)
-                },
-                token: {
-                    type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: async (_, { bio, token }) => {
-                const id = jwt.verify(token, process.env.JWT_SECRET).userId;
+            resolve: async (_, { bio }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
+                
+                const id = context.userId;
 
                 const user = await models.User.findById(id);
                 

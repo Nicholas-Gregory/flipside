@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { query } from '../utils';
 import useAuth from '../hooks/useAuth';
@@ -13,17 +13,11 @@ export default function Profile({
 }) {
     const [editing, setEditing] = useState(false);
     const [editingBio, setEditingBio] = useState(null);
-    const { authorize, errors } = useAuth();
+
+    useEffect(() => { setEditingBio(user?.bio)}, [user]);
 
     async function handleSaveChanges(e) {
-        const token = await authorize();
-
-        if (errors) {
-            alert(errors);
-            return;
-        }
-
-        await updateBio(editingBio, token);
+        await updateBio(editingBio);
 
         setEditing(false);
     }

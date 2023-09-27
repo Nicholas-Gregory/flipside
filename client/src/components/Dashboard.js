@@ -22,14 +22,14 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
     const [bioFlip, setBioFlip] = useState(false);
     const [currentConversation, setCurrentConversation] = useState(null);
 
-    async function updateBio(bio, token) {
+    async function updateBio(bio) {
         await query(`
-            mutation UpdateBio($bio: String!, $token: String!) {
-                updateBio(bio: $bio, token: $token) {
+            mutation UpdateBio($bio: String!) {
+                updateBio(bio: $bio) {
                     bio
                 }
             }
-        `, { bio, token});
+        `, { bio });
 
         setBioFlip(!bioFlip);
     }
