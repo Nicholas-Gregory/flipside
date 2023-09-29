@@ -40,6 +40,13 @@ const query = new GraphQLObjectType({
             },
             resolve: async (_, { id }) => await models.Conversation.findById(id)
         },
+        commentById: {
+            type: types.comment,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve: async (_, { id }) => await models.Comment.findById(id)
+        },
         login: {
             type: GraphQLString,
             args: {
@@ -141,7 +148,10 @@ const mutation = new GraphQLObjectType({
                     type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: async (_, { userId, friendId }) => {
+            resolve: async (_, { userId, friendId }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const user = await models.User.findById(userId);
                 const friend = await models.User.findById(friendId);
 
@@ -163,7 +173,10 @@ const mutation = new GraphQLObjectType({
                     type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: async (_, { userId, friendId }) => {
+            resolve: async (_, { userId, friendId }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const user = await models.User.findById(userId);
                 const friend = await models.User.findById(friendId);
 
@@ -185,7 +198,10 @@ const mutation = new GraphQLObjectType({
                     type: new GraphQLNonNull(GraphQLString)
                 }
             },
-            resolve: async (_, { userId, friendId }) => {
+            resolve: async (_, { userId, friendId }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const user = await models.User.findById(userId);
                 const friend = await models.User.findById(friendId);
 
@@ -213,7 +229,10 @@ const mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     }
                 },
-            resolve: async (_, { userId, friendId }) => {
+            resolve: async (_, { userId, friendId }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const user = await models.User.findById(userId);
                 const friend = await models.User.findById(friendId);
 
@@ -241,7 +260,10 @@ const mutation = new GraphQLObjectType({
                     type: new GraphQLList(GraphQLString)
                 }
             },
-            resolve: async (_, { title, participantIds, remarkIds, topics }) => {
+            resolve: async (_, { title, participantIds, remarkIds, topics }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const conversation = new models.Conversation({ 
                     title,
                     participants: (participantIds || [])
@@ -271,7 +293,10 @@ const mutation = new GraphQLObjectType({
                     type: new GraphQLNonNull(new GraphQLList(GraphQLString))
                 }
             },
-            resolve: async (_, { conversationId, userIds }) => {
+            resolve: async (_, { conversationId, userIds }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const conversation = await models.Conversation.findById(conversationId);
                 const users = [];
 
@@ -303,7 +328,10 @@ const mutation = new GraphQLObjectType({
                 },
                 quotedRemarkId: { type: GraphQLString }
             },
-            resolve: async (_, { conversationId, body, authorId, quotedRemarkId }) => {
+            resolve: async (_, { conversationId, body, authorId, quotedRemarkId }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const remark = new models.Remark({ 
                     body, 
                     author: authorId,
@@ -335,7 +363,10 @@ const mutation = new GraphQLObjectType({
                 },
                 link: { type: GraphQLString }
             },
-            resolve: async (_, { remarkId, text, body, link }) => {
+            resolve: async (_, { remarkId, text, body, link }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const remark = await models.Remark.findById(remarkId);
                 const citations = remark.citations;
 
@@ -362,7 +393,10 @@ const mutation = new GraphQLObjectType({
                     type: GraphQLString
                 }
             },
-            resolve: async (_, { remarkId, body, parentId }) => {
+            resolve: async (_, { remarkId, body, parentId }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
                 const remark = await models.Remark.findById(remarkId);
                 const comment = new models.Comment({
                     remark: remarkId,
