@@ -23,7 +23,7 @@ export default function Remark({ remark, onSaveComment }) {
                 <button onClick={() => setShowComments(false)}>Hide Comments</button>
             }
             {showComments &&
-                <CommentList comments={remark.comments} />
+                <CommentList comments={remark.comments} remarkId={remark.id} />
             }
             {!composing && 
                 <button onClick={() => setComposing(true)}>Add Comment</button>
