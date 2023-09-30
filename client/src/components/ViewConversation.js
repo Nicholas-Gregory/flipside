@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Remark from "./Remark";
 
-export default function ViewConversation({ loggedIn, conversation, onAddRemark }) {
+export default function ViewConversation({ loggedIn, conversation, onAddRemark, onSaveComment }) {
     const [composing, setComposing] = useState(false);
     const [newRemark, setNewRemark] = useState('');
 
@@ -35,7 +35,10 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark }
             <ul>
                 {conversation.remarks.map(remark =>
                     <li key={remark.id}>
-                        <Remark remark={remark} />
+                        <Remark 
+                            remark={remark} 
+                            onSaveComment={(body, remarkId) => onSaveComment(body, remarkId)} 
+                        />
                     </li>    
                 )}
             </ul>

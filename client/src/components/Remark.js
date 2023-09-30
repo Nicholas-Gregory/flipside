@@ -1,7 +1,16 @@
 import { useState } from "react"
+import CommentList from "./CommentList";
 
-export default function Remark({ remark }) {
+export default function Remark({ remark, onSaveComment }) {
     const [showComments, setShowComments] = useState(false);
+    const [composing, setComposing] = useState(false);
+    const [newComment, setNewComment] = useState('');
+
+    function handleSaveCommentClick() {
+        onSaveComment(newComment, remark.id);
+        setComposing(false);
+        setNewComment('');
+    }
 
     return (
         <>
@@ -13,6 +22,19 @@ export default function Remark({ remark }) {
                 : 
                 <button onClick={() => setShowComments(false)}>Hide Comments</button>
             }
+            {showComments &&
+                <CommentList comments={remark.comments} />
+            }
+            {!composing && 
+                <button onClick={() => setComposing(true)}>Add Comment</button>
+            }
+            {composing && <>
+                <textarea 
+                    value={newComment}
+                    onChange={e => setNewComment(e.target.value)}
+                />
+                <button onClick={handleSaveCommentClick}>Save</button>
+            </>}
         </>
     )
 }

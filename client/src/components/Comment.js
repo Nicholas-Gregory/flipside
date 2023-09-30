@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { query } from "../utils";
+import CommentList from "./CommentList";
 
-export function Comment({ comment }) {
+export default function Comment({ comment, onSubmitReply }) {
     const [replies, setReplies] = useState([]);
     const [showReplies, setShowReplies] = useState(false);
+    const [composing, setComposing] = useState(false);
+    const [newReply, setNewReply] = useState('');
 
     async function handleShowRepliesClick() {
         // Fetch replies and set showReplies to true
@@ -18,13 +21,19 @@ export function Comment({ comment }) {
             }
         `, { id: comment.id });
 
-        if (!response.ok) {
+        if (response.errors) {
             alert(response.errors[0].message);
             return;
         }
 
-        setReplies((await response.json()).data.commentById);
+        setReplies(response.data.commentById);
         setShowReplies(true);
+    }
+
+    function handleSaveReplyClick() {
+        onSubmitReply(newReply);
+        setComposing(false);
+        setNewReply('');
     }
 
     return (
@@ -34,6 +43,15 @@ export function Comment({ comment }) {
             {showReplies && <>
                 <button onClick={() => setShowReplies(false)}>Hide Replies</button>
                 <CommentList comments={replies} />
+            </>}
+            {!composing ?
+                <button onClick={() => setComposing(true)}>Add Reply</button>
+            :<>
+                <textarea 
+                    value={newReply}
+                    onChange={e => setNewReply(e.target.value)}
+                />
+                <button onClick={handleSaveReplyClick}>Save</button>
             </>}
         </>
     )

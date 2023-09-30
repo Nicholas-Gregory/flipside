@@ -8,8 +8,8 @@ export default function ConversationCardList({ conversations, onSelect }) {
                         Topics:
                     </p>
                     <ul>
-                        {conversation.topics.map(topic =>
-                            <li>
+                        {conversation.topics.map((topic, index) =>
+                            <li key={index}>
                                 {topic}
                             </li>    
                         )} 
@@ -18,8 +18,8 @@ export default function ConversationCardList({ conversations, onSelect }) {
                         Participants:
                     </p>
                     <ul>
-                        {conversation.participants.map(participant =>
-                            <li>
+                        {conversation.participants.map((participant, index) =>
+                            <li key={index}>
                                 {participant.username}
                             </li>    
                         )}

@@ -14,6 +14,7 @@ query Conversation($id: String!) {
         title,
         topics,
         remarks {
+            id,
             author {
                 id
             },
@@ -119,6 +120,23 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
         setCurrentConversation((await query(conversationQuery, { id: currentConversation.id })).data.conversationById);
     }
 
+    async function handleSaveComment(body, remarkId) {
+        const response = await query(`
+            mutation AddComment($remarkId: String!, $body: String!) {
+                addComment(remarkId: $remarkId, body: $body) {
+                    id
+                }
+            }
+        `, { remarkId, body });
+
+        if(response.errors) {
+            alert(response.errors[0].message);
+            return;
+        }
+
+        setCurrentConversation((await query(conversationQuery, { id: currentConversation.id })).data.conversationById);
+    }
+
     if (currentPage === 'browse') {
         return <BrowseConversations />
     } else if (currentPage === 'profile') {
@@ -138,6 +156,7 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
                 loggedIn={loggedIn}
                 conversation={currentConversation}
                 onAddRemark={handleAddRemark}
+                onSaveComment={handleSaveComment}
                />
     }
 }
