@@ -23,10 +23,20 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
                 Topics
             </h3>
             <ul>
-                {conversation.topics.map(topic =>
-                    <li>
+                {conversation.topics.map((topic, index) =>
+                    <li key={index}>
                         {topic}
                     </li>    
+                )}
+            </ul>
+            <h3>
+                Participants
+            </h3>
+            <ul>
+                {conversation.participants.map((participant, index) => 
+                    <li key={index}>
+                        {participant.username}
+                    </li>
                 )}
             </ul>
             <h1>

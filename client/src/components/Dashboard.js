@@ -22,6 +22,9 @@ query Conversation($id: String!) {
             comments {
                 id, body
             }
+        },
+        participants {
+            username
         }
     }
 }

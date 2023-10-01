@@ -33,6 +33,7 @@ export default function Remark({ remark, onSaveComment }) {
                     value={newComment}
                     onChange={e => setNewComment(e.target.value)}
                 />
+                <button>Add Citation</button>
                 <button onClick={handleSaveCommentClick}>Save</button>
             </>}
         </>
