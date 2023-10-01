@@ -34,7 +34,7 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
             </h3>
             <ul>
                 {conversation.participants.map((participant, index) => 
-                    <li key={index}>
+                    <li key={participant.id}>
                         {participant.username}
                     </li>
                 )}

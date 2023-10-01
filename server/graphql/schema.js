@@ -149,7 +149,7 @@ const mutation = new GraphQLObjectType({
                 }
             },
             resolve: async (_, { userId, friendId }, context) => {
-                if (!context.userId) {
+                if (context.userId !== userId) {
                     throw new Error("Authentication error");
                 }
                 const user = await models.User.findById(userId);
@@ -174,7 +174,7 @@ const mutation = new GraphQLObjectType({
                 }
             },
             resolve: async (_, { userId, friendId }, context) => {
-                if (!context.userId) {
+                if (context.userId !== userId) {
                     throw new Error("Authentication error");
                 }
                 const user = await models.User.findById(userId);
@@ -199,7 +199,7 @@ const mutation = new GraphQLObjectType({
                 }
             },
             resolve: async (_, { userId, friendId }, context) => {
-                if (!context.userId) {
+                if (context.userId !== userId) {
                     throw new Error("Authentication error");
                 }
                 const user = await models.User.findById(userId);
@@ -230,7 +230,7 @@ const mutation = new GraphQLObjectType({
                     }
                 },
             resolve: async (_, { userId, friendId }, context) => {
-                if (!context.userId) {
+                if (context.userId !== userId) {
                     throw new Error("Authentication error");
                 }
                 const user = await models.User.findById(userId);
@@ -332,6 +332,13 @@ const mutation = new GraphQLObjectType({
                 if (!context.userId) {
                     throw new Error("Authentication error");
                 }
+
+                const conversation = await models.Conversation.findById(conversationId);
+
+                if (!conversation.participants.includes(new mongoose.Types.ObjectId(context.userId))) {
+                    throw new Error("Must be participant of conversation to post remarks to it.");
+                }
+
                 const remark = new models.Remark({ 
                     body, 
                     author: authorId,
@@ -341,7 +348,6 @@ const mutation = new GraphQLObjectType({
                     : null
                 });
                 await remark.save();
-                const conversation = await models.Conversation.findById(conversationId);
 
                 conversation.remarks.push(remark._id);
                 await conversation.save();
@@ -368,6 +374,11 @@ const mutation = new GraphQLObjectType({
                     throw new Error("Authentication error");
                 }
                 const remark = await models.Remark.findById(remarkId);
+
+                if (remark.author !== new mongoose.Types.ObjectId(context.userId)) {
+                    throw new Error("Must be author of conversation to add citations to it");
+                }
+
                 const citations = remark.citations;
 
                 citations.push({

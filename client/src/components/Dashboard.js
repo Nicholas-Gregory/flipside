@@ -24,7 +24,8 @@ query Conversation($id: String!) {
             }
         },
         participants {
-            username
+            username,
+            id
         }
     }
 }
