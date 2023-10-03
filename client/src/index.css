@@ -32,3 +32,12 @@
     width: 50%;
     margin: 10px;
 }
+
+.card {
+    border: thin solid lightblue;
+    border-radius: 5px;
+    padding: 7px 20px;
+    width: fit-content;
+    background-color: gainsboro;
+    box-shadow: 10px 5px 5px gray;
+}
