@@ -9,7 +9,7 @@ export default function ConversationCardList({ conversations, onSelect }) {
                     </p>
                     <ul>
                         {conversation.topics.map((topic, index) =>
-                            <li key={index}>
+                            <li key={index} className="conversationTagLi">
                                 {topic}
                             </li>    
                         )} 
@@ -19,7 +19,7 @@ export default function ConversationCardList({ conversations, onSelect }) {
                     </p>
                     <ul>
                         {conversation.participants.map((participant, index) =>
-                            <li key={index}>
+                            <li key={index} className="conversationTagLi">
                                 {participant.username}
                             </li>    
                         )}

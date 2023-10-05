@@ -14,7 +14,7 @@ export default function Remark({ remark, onSaveComment }) {
 
     return (
         <>
-            <p>
+            <p style={{ maxWidth: "30vw", wordBreak: "break-word" }}>
                 {remark.body}
             </p>
             {!showComments ? 

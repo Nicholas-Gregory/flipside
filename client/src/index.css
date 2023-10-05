@@ -49,7 +49,7 @@ button {
     border-radius: 5px;
     padding: 7px 20px;
     margin: 10px;
-    width: fit-content;
+    width:auto;
     background-color: gainsboro;
     box-shadow: 10px 5px 5px gray;
 }
@@ -58,7 +58,7 @@ button {
     border: thin solid lightblue;
     border-radius: 5px;
     padding: 7px 20px;
-    background-color: white;
+    background-color: lightgray;
     margin: 5px;
 }
 
@@ -83,4 +83,12 @@ button {
     border: thin solid black;
     border-radius: 5px;
     box-shadow: 10px 5px 5px gray;
+}
+
+.conversationTagLi {
+    display: inline-block;
+    margin: 5px;
+    padding: 2px;
+    border: thin solid black;
+    border-radius: 5px;
 }

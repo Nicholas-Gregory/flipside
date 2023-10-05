@@ -24,21 +24,20 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
 
     return (
         <>{conversation && <>
-            <div className="card">
+            <div className="card" style={{ maxWidth: "30vw" }}>
                 <h1>
                     Conversation
                 </h1>
-                <div className="card">
-                    
+                <div className="card">                 
                     <h2>
                         {conversation.title}
                     </h2>
                     <h3>
                         Topics
                     </h3>
-                    <ul>
+                    <ul style={{ listStyleType: "none" }}>
                         {conversation.topics.map((topic, index) =>
-                            <li key={index}>
+                            <li key={index} className="conversationTagLi">
                                 {topic}
                             </li>    
                         )}
@@ -46,10 +45,10 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
                     <h3>
                         Participants
                     </h3>
-                    <ul>
+                    <ul style={{ listStyleType: "none" }}>
                         {conversation.participants.map((participant, index) => 
-                            <li key={participant.id}>
-                                {participant.username}
+                            <li className="conversationTagLi" key={participant.id}>
+                                <span>{participant.username}</span>
                             </li>
                         )}
                     </ul>
