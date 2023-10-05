@@ -54,12 +54,10 @@ export default function Comment({ comment, remarkId }) {
 
     return (
         <>
-            <p>{comment.body}</p>
+            <div className="commentBody">
+                <p>{comment.body}</p>
+            </div>
             {!showReplies && <button onClick={handleShowRepliesClick}>Show Replies</button>}
-            {showReplies && <>
-                <button onClick={() => setShowReplies(false)}>Hide Replies</button>
-                <CommentList comments={replies} remarkId={remarkId} />
-            </>}
             {!composing ?
                 <button onClick={() => setComposing(true)}>Add Reply</button>
             :<>
@@ -69,6 +67,11 @@ export default function Comment({ comment, remarkId }) {
                 />
                 <button onClick={handleSaveReplyClick}>Save</button>
             </>}
+            {showReplies && <>
+                <button onClick={() => setShowReplies(false)}>Hide Replies</button>
+                <CommentList comments={replies} remarkId={remarkId} />
+            </>}
+            
         </>
     )
 }

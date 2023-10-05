@@ -33,39 +33,43 @@ export default function Profile({
             </h1>
             <div id='profileFlexContainer'>
                 <div className='profileDiv'>
-                    <h2>
-                        Conversations
-                    </h2>
-                    {user.conversations.length > 0 ? 
-                    <ConversationCardList 
-                        conversations={user.conversations} 
-                        onSelect={handleSelectConversation}
-                    /> : "This user is not involved in any conversations"}
+                    <div className='card'>
+                        <h2>
+                            Conversations
+                        </h2>
+                        {user.conversations.length > 0 ? 
+                        <ConversationCardList 
+                            conversations={user.conversations} 
+                            onSelect={handleSelectConversation}
+                        /> : "This user is not involved in any conversations"}
+                    </div>
                 </div>
                 <div className='profileDiv'>
-                    <h2>
-                        Info
-                    </h2>
-                    <h3>
-                        About {user.username}
-                    </h3>
-                    {!editing && 
-                        <p>
-                            {user.bio}
-                        </p>
-                    }
-                    {editing &&
-                        <textarea
-                            value={editingBio}
-                            onChange={e => setEditingBio(e.target.value)}
-                        />
-                    }
-                    {loggedIn === user.id && !editing &&
-                        <button onClick={() => setEditing(true)}>Edit Bio</button>
-                    }
-                    {editing &&
-                        <button onClick={handleSaveChanges}>Save Changes</button>
-                    }
+                    <div className='card'>
+                        <h2>
+                            Info
+                        </h2>
+                        <h3>
+                            About {user.username}
+                        </h3>
+                        {!editing && 
+                            <p>
+                                {user.bio}
+                            </p>
+                        }
+                        {editing &&
+                            <textarea
+                                value={editingBio}
+                                onChange={e => setEditingBio(e.target.value)}
+                            />
+                        }
+                        {loggedIn === user.id && !editing &&
+                            <button onClick={() => setEditing(true)}>Edit Bio</button>
+                        }
+                        {editing &&
+                            <button onClick={handleSaveChanges}>Save Changes</button>
+                        }
+                    </div>
                 </div>
             </div>
         </>}</>

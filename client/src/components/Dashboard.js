@@ -141,6 +141,43 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
         setCurrentConversation((await query(conversationQuery, { id: currentConversation.id })).data.conversationById);
     }
 
+    async function handleAddPeople(input) {
+        const response = await query(`
+            mutation AddUsers($conversationId: String!, $usernames: [String]!) {
+                addUsersToConversationByUsername(conversationId: $conversationId, usernames: $usernames) {
+                    id,
+                    title,
+                    topics,
+                    remarks {
+                        id,
+                        author {
+                            id
+                        },
+                        body,
+                        comments {
+                            id, body
+                        }
+                    },
+                    participants {
+                        username,
+                        id
+                    }
+                }
+            }
+        `, {
+            conversationId: currentConversation.id,
+            usernames: input.split(',').map(user => user.trim())
+        });
+
+        if (response.errors) {
+            alert(response.errors[0].message);
+            return;
+        }
+
+        setCurrentConversation(response.data.addUsersToConversationByUsername);
+        setBioFlip(!bioFlip);
+    }
+
     if (currentPage === 'browse') {
         return <BrowseConversations />
     } else if (currentPage === 'profile') {
@@ -161,6 +198,7 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
                 conversation={currentConversation}
                 onAddRemark={handleAddRemark}
                 onSaveComment={handleSaveComment}
+                onAddPeople={handleAddPeople}
                />
     }
 }

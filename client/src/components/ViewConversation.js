@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Remark from "./Remark";
 
-export default function ViewConversation({ loggedIn, conversation, onAddRemark, onSaveComment }) {
+export default function ViewConversation({ loggedIn, conversation, onAddRemark, onSaveComment, onAddPeople }) {
     const [composing, setComposing] = useState(false);
     const [newRemark, setNewRemark] = useState('');
+    const [addingPeople, setAddingPeople] = useState(false);
+    const [addPeopleInput, setAddPeopleInput] = useState('');
 
     function handleSaveRemarkClick() {
         onAddRemark(newRemark);
@@ -11,13 +13,23 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
         setComposing(false);
     }
 
+    function handleAddPeopleClick() {
+        setAddingPeople(true);
+    }
+
+    async function handleAddClick() {
+        setAddingPeople(false);
+        onAddPeople(addPeopleInput)
+    }
+
     return (
         <>{conversation && <>
             <div className="card">
+                <h1>
+                    Conversation
+                </h1>
                 <div className="card">
-                    <h1>
-                        Conversation
-                    </h1>
+                    
                     <h2>
                         {conversation.title}
                     </h2>
@@ -41,21 +53,36 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
                             </li>
                         )}
                     </ul>
+                    {loggedIn && !addingPeople &&
+                        <button onClick={handleAddPeopleClick}>Add People</button>
+                    }
+                    {addingPeople && <>
+                        <p>
+                            Type the usernames of the people you wish to add, separated by commas
+                        </p>
+                        <textarea
+                            value={addPeopleInput}
+                            onChange={e => setAddPeopleInput(e.target.value)}
+                        />
+                        <button onClick={handleAddClick}>Add</button>
+                    </>}
                 </div>
                 <h1>
                     Remarks
                 </h1>
-                <ul>
-                    {conversation.remarks.map(remark =>
-                        <li key={remark.id}>
-                            <Remark 
-                                remark={remark} 
-                                onSaveComment={(body, remarkId) => onSaveComment(body, remarkId)} 
-                            />
-                        </li>    
-                    )}
-                </ul>
-                {loggedIn && !composing && <button onClick={() => setComposing(true)}>Add Remark</button>}
+                <div className="card">
+                    <ul className="remarkList">
+                        {conversation.remarks.map(remark =>
+                            <li key={remark.id} className="remarkLi">
+                                <Remark 
+                                    remark={remark} 
+                                    onSaveComment={(body, remarkId) => onSaveComment(body, remarkId)} 
+                                />
+                            </li>    
+                        )}
+                    </ul>
+                    {loggedIn && !composing && <button onClick={() => setComposing(true)}>Add Remark</button>}
+                </div>
                 {composing && <>
                     <textarea 
                         value={newRemark}

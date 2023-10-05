@@ -314,6 +314,38 @@ const mutation = new GraphQLObjectType({
                 return conversation;
             }
         },
+        addUsersToConversationByUsername: {
+            type: types.conversation,
+            args: {
+                conversationId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                usernames: {
+                    type: new GraphQLNonNull(new GraphQLList(GraphQLString))
+                }
+            },
+            resolve: async (_, { conversationId, usernames}, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
+
+                const conversation = await models.Conversation.findById(conversationId);
+                const participants = conversation.participants;
+
+                if (!participants.includes(new mongoose.Types.ObjectId(context.userId))) {
+                    throw new Error("Must be participant of conversation to add users");
+                }
+
+                const users = await models.User.find({ 
+                    username: usernames
+                });
+
+                users.forEach(user => participants.addToSet(user._id));
+                await conversation.save();
+
+                return conversation;
+            }
+        },
         addRemark: {
             type: types.remark,
             args: {

@@ -1,3 +1,8 @@
+button {
+    background-color: white;
+    border-radius: 10px;
+}
+
 #nav {
     padding-left: 0%;
 }
@@ -26,6 +31,12 @@
 
 #profileFlexContainer {
     display: flex;
+    border: thin solid lightblue;
+    border-radius: 5px;
+    padding: 7px 20px;
+    background-color: gainsboro;
+    box-shadow: 10px 5px 5px gray;
+    width: 75%
 }
 
 .profileDiv {
@@ -37,7 +48,39 @@
     border: thin solid lightblue;
     border-radius: 5px;
     padding: 7px 20px;
+    margin: 10px;
     width: fit-content;
     background-color: gainsboro;
+    box-shadow: 10px 5px 5px gray;
+}
+
+.commentBody {
+    border: thin solid lightblue;
+    border-radius: 5px;
+    padding: 7px 20px;
+    background-color: white;
+    margin: 5px;
+}
+
+.commentLi {
+    list-style-type: none;
+}
+
+.commentList {
+    margin: 5px;
+}
+
+.remarkList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.remarkLi {
+    background-color: gray;
+    padding: 10px;
+    margin: 5px;
+    border: thin solid black;
+    border-radius: 5px;
     box-shadow: 10px 5px 5px gray;
 }
