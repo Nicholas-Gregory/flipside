@@ -24,7 +24,7 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
 
     return (
         <>{conversation && <>
-            <div className="card" style={{ maxWidth: "30vw" }}>
+            <div className="card conversationContainer">
                 <h1>
                     Conversation
                 </h1>

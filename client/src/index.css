@@ -49,7 +49,6 @@ button {
     border-radius: 5px;
     padding: 7px 20px;
     margin: 10px;
-    width:auto;
     background-color: gainsboro;
     box-shadow: 10px 5px 5px gray;
 }
@@ -91,4 +90,15 @@ button {
     padding: 2px;
     border: thin solid black;
     border-radius: 5px;
+}
+
+.conversationContainer {
+    max-width: 30vw;
+}
+
+@media screen and (max-width: 720px) {
+    .conversationContainer {
+        max-width: none;
+        width: 100%;
+    }
 }
