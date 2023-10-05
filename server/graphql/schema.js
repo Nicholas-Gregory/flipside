@@ -340,7 +340,11 @@ const mutation = new GraphQLObjectType({
                     username: usernames
                 });
 
-                users.forEach(user => participants.addToSet(user._id));
+                for (let user of users) {
+                    participants.addToSet(user._id);
+                    user.conversations.addToSet(conversation.id);
+                    await user.save();
+                }
                 await conversation.save();
 
                 return conversation;
