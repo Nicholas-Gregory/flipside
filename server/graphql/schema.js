@@ -391,6 +391,34 @@ const mutation = new GraphQLObjectType({
                 return remark;
             }
         },
+        updateRemarkBody: {
+            type: types.remark,
+            args: {
+                remarkId: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                newBody: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve: async (_, { remarkId, newBody }, context) => {
+                if (!context.userId) {
+                    throw new Error("Authentication error");
+                }
+                const remark = await models.Remark.findById(remarkId);
+
+                console.log(remark.author, context.userId)
+
+                if (!remark.author.equals(new mongoose.Types.ObjectId(context.userId))) {
+                    throw new Error("Must be author of remark to change it");
+                }
+
+                remark.body = newBody;
+                await remark.save();
+
+                return remark;
+            }
+        },
         addCitation: {
             type: types.citation,
             args: {
@@ -411,8 +439,8 @@ const mutation = new GraphQLObjectType({
                 }
                 const remark = await models.Remark.findById(remarkId);
 
-                if (remark.author !== new mongoose.Types.ObjectId(context.userId)) {
-                    throw new Error("Must be author of conversation to add citations to it");
+                if (remark.author.equals(new mongoose.Types.ObjectId(context.userId))) {
+                    throw new Error("Must be author of remark to add citations to it");
                 }
 
                 const citations = remark.citations;

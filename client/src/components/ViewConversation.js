@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Remark from "./Remark";
 
-export default function ViewConversation({ loggedIn, conversation, onAddRemark, onSaveComment, onAddPeople }) {
+export default function ViewConversation({ 
+    loggedIn, 
+    conversation, 
+    onAddRemark, 
+    onSaveComment, 
+    onAddPeople, 
+    onSubmitCitation,
+    onSelectCitationText
+}) {
     const [composing, setComposing] = useState(false);
     const [newRemark, setNewRemark] = useState('');
     const [addingPeople, setAddingPeople] = useState(false);
     const [addPeopleInput, setAddPeopleInput] = useState('');
+    
 
     function handleSaveRemarkClick() {
         onAddRemark(newRemark);
@@ -20,6 +29,14 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
     async function handleAddClick() {
         setAddingPeople(false);
         onAddPeople(addPeopleInput)
+    }
+    
+    function handleSubmitCitation(remarkId, text, body, link) {
+        onSubmitCitation(remarkId, text, body, link);
+    }
+
+    function handleSelectCitationText(remarkId, selection) {
+        onSelectCitationText(remarkId, selection)
     }
 
     return (
@@ -75,8 +92,11 @@ export default function ViewConversation({ loggedIn, conversation, onAddRemark, 
                             <li key={remark.id} className="remarkLi">
                                 <Remark 
                                     remark={remark} 
-                                    onSaveComment={(body, remarkId) => onSaveComment(body, remarkId)} 
+                                    onSaveComment={(body, remarkId) => onSaveComment(body, remarkId)}
+                                    onSubmitCitation={handleSubmitCitation} 
+                                    onSelectCitationText={handleSelectCitationText}
                                 />
+                                
                             </li>    
                         )}
                     </ul>

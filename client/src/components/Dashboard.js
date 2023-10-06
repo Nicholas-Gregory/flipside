@@ -21,6 +21,9 @@ query Conversation($id: String!) {
             body,
             comments {
                 id, body
+            },
+            citations {
+                id, text, body, link
             }
         },
         participants {
@@ -156,6 +159,9 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
                         body,
                         comments {
                             id, body
+                        },
+                        citations {
+                            id, text, body, link
                         }
                     },
                     participants {
@@ -176,6 +182,54 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
 
         setCurrentConversation(response.data.addUsersToConversationByUsername);
         setBioFlip(!bioFlip);
+    }
+
+    async function handleSubmitCitation(remarkId, text, body, link) {
+        const response = await query(`
+            mutation AddCitation($remarkId: String!, $text: String!, $body: String!, $link: String) {
+                addCitation(remarkId: $remarkId, text: $text, body: $body, link: $link) {
+                    id
+                }
+            }
+        `, { remarkId, text, body, link});
+
+        if (response.errors) {
+            alert(response.errors[0].message);
+            return;
+        }
+
+        setCurrentConversation((await query(conversationQuery, { id: currentConversation.id })).data.conversationById);
+    }
+
+    async function handleSelectCitationText(remarkId, selection) {
+        const anchor = selection.anchorOffset;
+        const focus = selection.focusOffset;
+        let offset;
+
+        if (anchor < focus) {
+            offset = focus;
+        } else if (focus < anchor) {
+            offset = anchor;
+        }
+
+        const numberOfCitations = currentConversation.citations ? currentConversation.citations.length : 0;
+        const remarkBody = currentConversation.remarks.find(r => r.id === remarkId).body;
+        const newBody = remarkBody.split('').toSpliced(offset, 0, `[${numberOfCitations + 1}]`).join('');
+
+        const response = await query(`
+            mutation AddCitationMarker($remarkId: String!, $newBody: String!) {
+                updateRemarkBody(remarkId: $remarkId, newBody: $newBody) {
+                    id
+                }
+            }
+        `, { remarkId, newBody });
+
+        if (response.errors) {
+            alert(response.errors[0].message);
+            return;
+        }
+
+        setCurrentConversation((await query(conversationQuery, { id: currentConversation.id })).data.conversationById);
     }
 
     if (currentPage === 'browse') {
@@ -199,6 +253,8 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
                 onAddRemark={handleAddRemark}
                 onSaveComment={handleSaveComment}
                 onAddPeople={handleAddPeople}
+                onSubmitCitation={handleSubmitCitation}
+                onSelectCitationText={handleSelectCitationText}
                />
     }
 }

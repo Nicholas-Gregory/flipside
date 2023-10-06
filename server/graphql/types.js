@@ -2,7 +2,8 @@ const {
     GraphQLObjectType,
     GraphQLInt,
     GraphQLString,
-    GraphQLList
+    GraphQLList,
+    GraphQLNonNull
 } = require('graphql');
 const { Types } = require('mongoose');
 
@@ -82,7 +83,7 @@ const remark = new GraphQLObjectType({
             resolve: async remark => await models.Remark.findById(remark.quote)
         },
         citations: {
-            type: new GraphQLList(citation)
+            type: new GraphQLNonNull(new GraphQLList(citation))
         },
         likes: {
             type: GraphQLInt
