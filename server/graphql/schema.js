@@ -437,8 +437,6 @@ const mutation = new GraphQLObjectType({
                 }
                 const remark = await models.Remark.findById(remarkId);
 
-                console.log(remark.author, context.userId)
-
                 if (!remark.author.equals(new mongoose.Types.ObjectId(context.userId))) {
                     throw new Error("Must be author of remark to add citations to it");
                 }

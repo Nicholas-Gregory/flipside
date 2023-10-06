@@ -67,11 +67,26 @@ export default function Remark({ remark, onSaveComment, onSubmitCitation, onSele
         }
     }
 
+    function parseRemarkBody(body) {
+        const markup = [];
+
+        for (let i = 0; i < body.length; i++) {
+            if (body[i + 1] === '[') {
+                markup.push(<span style={{ color: 'blue' }}>[{body[i + 2]}]</span>);
+                i += 3;
+            } else {
+                markup.push(body[i]);
+            }
+        }
+
+        return markup;
+    }
+
     return (
         <>
             <p className="authorText">Author: {remark.author.username}</p>
             <p style={{ maxWidth: "30vw", wordBreak: "break-word" }}>
-                {remark.body}
+                {parseRemarkBody(remark.body)}
             </p>
             {!showComments ?
                 <button onClick={() => setShowComments(true)}>Show Comments</button>
