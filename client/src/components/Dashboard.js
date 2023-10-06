@@ -212,8 +212,9 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
             offset = anchor;
         }
 
-        const numberOfCitations = currentConversation.citations ? currentConversation.citations.length : 0;
-        const remarkBody = currentConversation.remarks.find(r => r.id === remarkId).body;
+        const remark = currentConversation.remarks.find(r => r.id === remarkId)
+        const numberOfCitations = remark.citations ? remark.citations.length : 0;
+        const remarkBody = remark.body;
         const newBody = remarkBody.split('').toSpliced(offset, 0, `[${numberOfCitations + 1}]`).join('');
 
         const response = await query(`

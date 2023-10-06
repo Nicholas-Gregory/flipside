@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import CommentList from "./CommentList";
 
 export default function Remark({ remark, onSaveComment, onSubmitCitation, onSelectCitationText }) {
@@ -10,26 +10,20 @@ export default function Remark({ remark, onSaveComment, onSubmitCitation, onSele
     const [citationLinkInput, setCitationLinkInput] = useState('');
     const [citationText, setCitationText] = useState('');
 
-    function handleKeyDown(e) {
-        if (e.code === 'Enter' && citationStage === 'selecting') {
-            setCitationStage('composing');
+    function handleSelectClick() {
+        setCitationStage('composing');
 
-            const selection = window.getSelection()
-            setCitationText(selection.toString());
+        const selection = window.getSelection();
+        setCitationText(selection.toString());
 
-            onSelectCitationText(remark.id, selection);
-        }
+        onSelectCitationText(remark.id, selection);
     }
-
-    useEffect(() => {
-        window.addEventListener('keydown', handleKeyDown, true);
-
-        return () => { window.removeEventListener('keydown', handleKeyDown) };
-    })
 
     function handleCitationFormSubmit(e) {
         e.preventDefault();
         setCitationStage('default');
+
+        console.log(citationText);
 
         onSubmitCitation(remark.id, citationText, citationBodyInput, citationLinkInput);
 
@@ -49,7 +43,9 @@ export default function Remark({ remark, onSaveComment, onSubmitCitation, onSele
             case 'default':
                 return <button onClick={() => setCitationStage('selecting')}>Add Citation</button>;
             case 'selecting':
-                return <p>Select the text you want to add the citation to and press the 'Enter' key</p>
+                return <p>
+                    Select the text you want to add the citation to and click <button onClick={handleSelectClick}>here.</button>
+                </p>
             case 'composing':
                 return (
                     <form onSubmit={handleCitationFormSubmit}>
