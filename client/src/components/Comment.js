@@ -55,6 +55,7 @@ export default function Comment({ comment, remarkId }) {
     return (
         <>
             <div className="commentBody">
+                <p className="authorText">Author: {comment.author}</p>
                 <p>{comment.body}</p>
             </div>
             {!showReplies && <button onClick={handleShowRepliesClick}>Show Replies</button>}

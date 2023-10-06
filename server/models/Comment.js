@@ -8,7 +8,8 @@ const commentSchema = new Schema({
     },
     parent: { type: Schema.Types.ObjectId, ref: 'Comment' },
     replies: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-    likes: Number
+    likes: Number,
+    author: { type: String }
 });
 
 const Comment = mongoose.model('Comment', commentSchema);

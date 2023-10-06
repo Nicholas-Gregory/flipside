@@ -472,11 +472,13 @@ const mutation = new GraphQLObjectType({
                 if (!context.userId) {
                     throw new Error("Authentication error");
                 }
+                const user = await models.User.findById(context.userId);
                 const remark = await models.Remark.findById(remarkId);
                 const comment = new models.Comment({
                     remark: remarkId,
                     body,
-                    parent: parentId
+                    parent: parentId,
+                    author: user.username
                 });
                 await comment.save();
                 const comments = remark.comments;

@@ -69,6 +69,7 @@ export default function Remark({ remark, onSaveComment, onSubmitCitation, onSele
 
     return (
         <>
+            <p className="authorText">Author: {remark.author.username}</p>
             <p style={{ maxWidth: "30vw", wordBreak: "break-word" }}>
                 {remark.body}
             </p>

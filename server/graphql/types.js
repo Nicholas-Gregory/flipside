@@ -29,6 +29,9 @@ const comment = new GraphQLObjectType({
         },
         likes: {
             type: GraphQLInt
+        },
+        author: {
+            type: GraphQLString
         }
     })
 })

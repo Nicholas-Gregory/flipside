@@ -16,11 +16,11 @@ query Conversation($id: String!) {
         remarks {
             id,
             author {
-                id
+                id, username
             },
             body,
             comments {
-                id, body
+                id, body, author
             },
             citations {
                 id, text, body, link
@@ -154,11 +154,11 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
                     remarks {
                         id,
                         author {
-                            id
+                            id, username
                         },
                         body,
                         comments {
-                            id, body
+                            id, body, author
                         },
                         citations {
                             id, text, body, link
