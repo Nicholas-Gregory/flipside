@@ -47,6 +47,10 @@ export default function ViewConversation({
         setDisplayedCitations([...displayedCitations, remark.citations[citationIndex]]);
     }
 
+    function handleCitationClose(citationId) {
+        setDisplayedCitations(displayedCitations.filter(c => c.id !== citationId));
+    }
+
     return (
         <>{conversation && 
             <div style={{ display: 'flex' }}>
@@ -126,7 +130,11 @@ export default function ViewConversation({
                     </h1>
                     {displayedCitations.length > 0 ?
                         displayedCitations.map((citation, index) => 
-                            <CitationCard key={index} citation={citation} />    
+                            <CitationCard 
+                                key={index} 
+                                citation={citation} 
+                                onClose={handleCitationClose}
+                            />    
                         )
                         :
                         <p>Click a citation's subscript number to display it here</p>
