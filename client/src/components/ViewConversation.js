@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Remark from "./Remark";
+import CitationCard from "./CitationCard";
 
 export default function ViewConversation({ 
     loggedIn, 
@@ -14,6 +15,7 @@ export default function ViewConversation({
     const [newRemark, setNewRemark] = useState('');
     const [addingPeople, setAddingPeople] = useState(false);
     const [addPeopleInput, setAddPeopleInput] = useState('');
+    const [displayedCitations, setDisplayedCitations] = useState([]);
     
 
     function handleSaveRemarkClick() {
@@ -37,6 +39,12 @@ export default function ViewConversation({
 
     function handleSelectCitationText(remarkId, selection) {
         onSelectCitationText(remarkId, selection)
+    }
+
+    function handleCitationClick(remarkId, citationIndex) {
+        const remark = conversation.remarks.find(r => r.id === remarkId);
+        
+        setDisplayedCitations([...displayedCitations, remark.citations[citationIndex]]);
     }
 
     return (
@@ -96,6 +104,7 @@ export default function ViewConversation({
                                         onSaveComment={(body, remarkId) => onSaveComment(body, remarkId)}
                                         onSubmitCitation={handleSubmitCitation} 
                                         onSelectCitationText={handleSelectCitationText}
+                                        onCitationClick={handleCitationClick}
                                     />
                                     
                                 </li>    
@@ -115,6 +124,13 @@ export default function ViewConversation({
                     <h1>
                         Citations
                     </h1>
+                    {displayedCitations.length > 0 ?
+                        displayedCitations.map((citation, index) => 
+                            <CitationCard key={index} citation={citation} />    
+                        )
+                        :
+                        <p>Click a citation's subscript number to display it here</p>
+                    }
                 </div>
             </div>
         }</>

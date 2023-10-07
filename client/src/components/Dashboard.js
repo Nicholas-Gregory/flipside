@@ -202,20 +202,54 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
     }
 
     async function handleSelectCitationText(remarkId, selection) {
-        const anchor = selection.anchorOffset;
-        const focus = selection.focusOffset;
-        let offset;
+        const anchorNode = selection.anchorNode;
+        const focusNode = selection.focusNode;
+        const firstChild = anchorNode.parentNode.parentNode.firstChild;
+        let lastNodePosition;
 
-        if (anchor < focus) {
-            offset = focus;
-        } else if (focus < anchor) {
-            offset = anchor;
+        let counterNode = firstChild;
+
+        // get anchor node position
+        let anchorNodePosition = 0;
+        while (counterNode.firstChild !== anchorNode) {
+            anchorNodePosition++;
+            counterNode = counterNode.nextSibling;
+        }
+
+        counterNode = firstChild;
+
+        // get focus node position
+        let focusNodePosition = 0;
+        while (counterNode.firstChild !== focusNode) {
+            focusNodePosition++;
+            counterNode = counterNode.nextSibling;
+        }
+
+        // get position of whichever node is last
+        if (anchorNodePosition < focusNodePosition) {
+            lastNodePosition = focusNodePosition;
+        } else if (anchorNodePosition > focusNodePosition) {
+            lastNodePosition = anchorNodePosition;
+        }
+
+        // compute character-wise offset
+        let offset = 0;
+        let counter = 0;
+        counterNode = firstChild;
+        while (counter <= lastNodePosition) {
+            counter++;
+            if (counterNode.nodeName === 'PRE') {
+                offset++;
+            } else {
+                offset += 3;
+            }
+            counterNode = counterNode.nextSibling;
         }
 
         const remark = currentConversation.remarks.find(r => r.id === remarkId)
         const numberOfCitations = remark.citations ? remark.citations.length : 0;
         const remarkBody = remark.body;
-        const newBody = remarkBody.split('').toSpliced(offset, 0, `[${numberOfCitations + 1}]`).join('');
+        const newBody = remarkBody.split('').toSpliced(offset, 0, `[${numberOfCitations + 1}]`).join('');        
 
         const response = await query(`
             mutation AddCitationMarker($remarkId: String!, $newBody: String!) {

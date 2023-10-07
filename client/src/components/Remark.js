@@ -1,7 +1,7 @@
 import { useState } from "react"
 import CommentList from "./CommentList";
 
-export default function Remark({ remark, onSaveComment, onSubmitCitation, onSelectCitationText }) {
+export default function Remark({ remark, onSaveComment, onSubmitCitation, onSelectCitationText, onCitationClick }) {
     const [showComments, setShowComments] = useState(false);
     const [composing, setComposing] = useState(false);
     const [newComment, setNewComment] = useState('');
@@ -67,15 +67,27 @@ export default function Remark({ remark, onSaveComment, onSubmitCitation, onSele
         }
     }
 
+    function handleCitationClick(remarkId, citationIndex) {
+        onCitationClick(remarkId, citationIndex);
+    }
+
     function parseRemarkBody(body) {
         const markup = [];
 
         for (let i = 0; i < body.length; i++) {
-            if (body[i + 1] === '[') {
-                markup.push(<span style={{ color: 'blue' }}>[{body[i + 2]}]</span>);
-                i += 3;
+            if (body[i] === '[') {
+                const citationIndex = Number(body[i + 1]) - 1
+                markup.push(<span 
+                    key={i}
+                    style={{ 
+                        color: 'blue',
+                        cursor: 'grab'
+                    }}
+                    onClick={() => handleCitationClick(remark.id, citationIndex)}
+                >[{body[i + 1]}]</span>);
+                i += 2;
             } else {
-                markup.push(body[i]);
+                markup.push(<pre key={i} style={{ display: 'inline'}}>{body[i]}</pre>);
             }
         }
 
@@ -85,9 +97,9 @@ export default function Remark({ remark, onSaveComment, onSubmitCitation, onSele
     return (
         <>
             <p className="authorText">Author: {remark.author.username}</p>
-            <p style={{ maxWidth: "30vw", wordBreak: "break-word" }}>
+            <div style={{ maxWidth: "30vw", wordBreak: "break-word" }}>
                 {parseRemarkBody(remark.body)}
-            </p>
+            </div>
             {!showComments ?
                 <button onClick={() => setShowComments(true)}>Show Comments</button>
                 :
