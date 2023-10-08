@@ -4,10 +4,12 @@ import ConversationCardList from "./ConversationCardList";
 
 export default function BrowseConversations({ onSelectConversation }) {
     const [conversations, setConversations] = useState([]);
+    const [displayedConversations, setDisplayedConversations] = useState([]);
+    const [titleSearch, setTitleSearch] = useState('');
 
     useEffect(() => {
-        (async () => 
-            setConversations((await query(`
+        (async () => {
+            const loadedConversations = (await query(`
                 {
                     conversations {
                         id, title, topics,
@@ -16,15 +18,37 @@ export default function BrowseConversations({ onSelectConversation }) {
                         }
                     }
                 }
-            `)).data.conversations)
-        )();
+            `)).data.conversations
+            setConversations(loadedConversations);
+            setDisplayedConversations(loadedConversations);
+        })();
     }, []);
 
-    function handleSelect(conversation) {
-        onSelectConversation(conversation);
+    function handleSelect(conversationId) {
+        onSelectConversation(conversationId);
+    }
+
+    function handleSearchByTitle(e) {
+        e.preventDefault();
+        setTitleSearch('');
+        setDisplayedConversations(conversations.filter(c => c.title === titleSearch));
     }
 
     return (
-        <ConversationCardList conversations={conversations} onSelect={handleSelect} />
+        <>
+            <button onClick={() => setDisplayedConversations(conversations)}>View All</button>
+            <form onSubmit={handleSearchByTitle}>
+                <input
+                    type="text"
+                    value={titleSearch}
+                    onChange={e => setTitleSearch(e.target.value)}
+                    placeholder="Search by Title"
+                />
+            </form>
+            <ConversationCardList 
+                conversations={displayedConversations} 
+                onSelect={handleSelect} 
+            />
+        </>
     );
 }
