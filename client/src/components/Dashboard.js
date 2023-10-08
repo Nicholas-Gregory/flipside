@@ -267,8 +267,14 @@ export default function Dashboard({ loggedIn, currentPage, onSelectConversation 
         setCurrentConversation((await query(conversationQuery, { id: currentConversation.id })).data.conversationById);
     }
 
+    function handleBrowseSelection(conversationId) {
+        handleSelectConversation(conversationId)
+    }
+
     if (currentPage === 'browse') {
-        return <BrowseConversations />
+        return <BrowseConversations 
+                onSelectConversation={handleBrowseSelection}
+            />
     } else if (currentPage === 'profile') {
         return <Profile 
                 loggedIn={loggedIn}
