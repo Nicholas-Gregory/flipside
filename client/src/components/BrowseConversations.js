@@ -7,6 +7,7 @@ export default function BrowseConversations({ onSelectConversation }) {
     const [displayedConversations, setDisplayedConversations] = useState([]);
     const [titleSearch, setTitleSearch] = useState('');
     const [topicSearch, setTopicSearch] = useState('');
+    const [participantSearch, setParticipantSearch] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -41,9 +42,25 @@ export default function BrowseConversations({ onSelectConversation }) {
         e.preventDefault();
 
         const topics = topicSearch.split(',').map(t => t.trim());
-        setDisplayedConversations(conversations.filter(c => c.topics.some(t => topics.includes(t))))
+        setDisplayedConversations(conversations
+            .filter(c => c.topics
+                .some(t => topics
+                    .includes(t))))
 
         setTopicSearch('')
+    }
+
+    function handleParticipantSearch(e) {
+        e.preventDefault();
+
+        const participants = participantSearch.split(',').map(p => p.trim());
+        setDisplayedConversations(conversations
+            .filter(c => c.participants
+                .map(p => p.username)
+                .some(p => participants
+                    .includes(p))));
+
+        setParticipantSearch('');
     }
 
     return (
@@ -62,14 +79,23 @@ export default function BrowseConversations({ onSelectConversation }) {
                     type="text"
                     value={topicSearch}
                     onChange={e => setTopicSearch(e.target.value)}
-                    placeholder="Search by topic(s), separated by spaces"
+                    placeholder="Search by topic(s), separated by commas"
                     size={39}
                 />
             </form>
-            <ConversationCardList 
+            <form onSubmit={handleParticipantSearch}>
+                <input 
+                    type="text"
+                    value={participantSearch}
+                    onChange={e => setParticipantSearch(e.target.value)}
+                    placeholder="Search by participant(s), separated by commas"
+                    size={39}
+                />
+            </form>
+            {displayedConversations.length > 0 ? <ConversationCardList 
                 conversations={displayedConversations} 
                 onSelect={handleSelect} 
-            />
+            /> : "No conversations matched your search"}
         </>
     );
 }
