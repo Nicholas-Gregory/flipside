@@ -6,6 +6,7 @@ export default function BrowseConversations({ onSelectConversation }) {
     const [conversations, setConversations] = useState([]);
     const [displayedConversations, setDisplayedConversations] = useState([]);
     const [titleSearch, setTitleSearch] = useState('');
+    const [topicSearch, setTopicSearch] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -30,8 +31,19 @@ export default function BrowseConversations({ onSelectConversation }) {
 
     function handleSearchByTitle(e) {
         e.preventDefault();
-        setTitleSearch('');
+
         setDisplayedConversations(conversations.filter(c => c.title === titleSearch));
+
+        setTitleSearch('');
+    }
+
+    function handleTopicSearch(e) {
+        e.preventDefault();
+
+        const topics = topicSearch.split(',').map(t => t.trim());
+        setDisplayedConversations(conversations.filter(c => c.topics.some(t => topics.includes(t))))
+
+        setTopicSearch('')
     }
 
     return (
@@ -43,6 +55,15 @@ export default function BrowseConversations({ onSelectConversation }) {
                     value={titleSearch}
                     onChange={e => setTitleSearch(e.target.value)}
                     placeholder="Search by Title"
+                />
+            </form>
+            <form onSubmit={handleTopicSearch}>
+                <input
+                    type="text"
+                    value={topicSearch}
+                    onChange={e => setTopicSearch(e.target.value)}
+                    placeholder="Search by topic(s), separated by spaces"
+                    size={39}
                 />
             </form>
             <ConversationCardList 
