@@ -67,6 +67,7 @@ export default function Comment({ comment, remarkId }) {
                     onChange={e => setNewReply(e.target.value)}
                 />
                 <button onClick={handleSaveReplyClick}>Save</button>
+                <button onClick={() => setComposing(false)}>Cancel</button>
             </>}
             {showReplies && <>
                 <button onClick={() => setShowReplies(false)}>Hide Replies</button>

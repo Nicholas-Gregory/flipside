@@ -118,6 +118,7 @@ export default function Remark({ remark, onSaveComment, onSubmitCitation, onSele
                     onChange={e => setNewComment(e.target.value)}
                 />
                 <button onClick={handleSaveCommentClick}>Save</button>
+                <button onClick={() => setComposing(false)}>Cancel</button>
             </>}
         </>
     )

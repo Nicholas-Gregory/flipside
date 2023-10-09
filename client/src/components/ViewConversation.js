@@ -122,6 +122,7 @@ export default function ViewConversation({
                             onChange={e => setNewRemark(e.target.value)}
                         />
                         <button onClick={handleSaveRemarkClick}>Save</button>
+                        <button onClick={() => setComposing(false)}>Cancel</button>
                     </>}
                 </div>
                 <div className="card">
