@@ -1,7 +1,14 @@
 import { useState } from "react"
 import CommentList from "./CommentList";
 
-export default function Remark({ remark, onSaveComment, onSubmitCitation, onSelectCitationText, onCitationClick }) {
+export default function Remark({ 
+    loggedIn,
+    remark, 
+    onSaveComment, 
+    onSubmitCitation, 
+    onSelectCitationText, 
+    onCitationClick 
+}) {
     const [showComments, setShowComments] = useState(false);
     const [composing, setComposing] = useState(false);
     const [newComment, setNewComment] = useState('');
@@ -41,7 +48,13 @@ export default function Remark({ remark, onSaveComment, onSubmitCitation, onSele
     function citationMarkup() {
         switch (citationStage) {
             case 'default':
-                return <button onClick={() => setCitationStage('selecting')}>Add Citation</button>;
+                return (
+                    <>
+                        {loggedIn === remark.author.id &&
+                            <button onClick={() => setCitationStage('selecting')}>Add Citation</button>
+                        }
+                    </>
+                );
             case 'selecting':
                 return <p>
                     Select the text you want to add the citation to and click <button onClick={handleSelectClick}>here.</button>

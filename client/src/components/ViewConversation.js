@@ -104,6 +104,7 @@ export default function ViewConversation({
                             {conversation.remarks.map(remark =>
                                 <li key={remark.id} className="remarkLi">
                                     <Remark 
+                                        loggedIn={loggedIn}
                                         remark={remark} 
                                         onSaveComment={(body, remarkId) => onSaveComment(body, remarkId)}
                                         onSubmitCitation={handleSubmitCitation} 
@@ -114,7 +115,9 @@ export default function ViewConversation({
                                 </li>    
                             )}
                         </ul>
-                        {loggedIn && !composing && <button onClick={() => setComposing(true)}>Add Remark</button>}
+                        {conversation.participants
+                        .map(p => p.id)
+                        .includes(loggedIn) && !composing && <button onClick={() => setComposing(true)}>Add Remark</button>}
                     </div>
                     {composing && <>
                         <textarea 
