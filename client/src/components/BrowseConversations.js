@@ -92,10 +92,15 @@ export default function BrowseConversations({ onSelectConversation }) {
                     size={39}
                 />
             </form>
-            {displayedConversations.length > 0 ? <ConversationCardList 
-                conversations={displayedConversations} 
-                onSelect={handleSelect} 
-            /> : "No conversations matched your search"}
+            {displayedConversations.length > 0 ? 
+            <div className="card" style={{ width: "50%" }}>
+                <ConversationCardList 
+                    conversations={displayedConversations} 
+                    onSelect={handleSelect}                     
+                />
+            </div> 
+            : 
+            "No conversations matched your search"}
         </>
     );
 }

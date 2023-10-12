@@ -1,8 +1,8 @@
 export default function ConversationCardList({ conversations, onSelect }) {
     return (
-        <ul>
+        <ul style={{ listStyleType: 'none' }}>
             {conversations.map(conversation =>
-                <li key={conversation.id}>
+                <li className="card" key={conversation.id}>
                     <button onClick={() => onSelect(conversation.id)}><em>{conversation.title}</em><br/></button>
                     <p>
                         Topics:
