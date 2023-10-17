@@ -1,4 +1,4 @@
-const query = async (query, variables) => await (await fetch('/api', {
+export const query = async (query, variables) => await (await fetch('/api', {
     method: 'POST',
     headers: { 
         'Content-Type': 'application/json',
@@ -10,6 +10,3 @@ const query = async (query, variables) => await (await fetch('/api', {
     })}
 )).json()
 
-module.exports = {
-    query
-}
