@@ -3,6 +3,7 @@ const db = require('./config/dbConnection');
 const { graphqlHTTP } = require('express-graphql')
 const { GraphQLSchema } = require('graphql')
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 const { query, mutation } = require('./graphql/schema');
 
