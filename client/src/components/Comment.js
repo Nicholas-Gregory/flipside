@@ -7,7 +7,8 @@ query Comment($id: String!) {
     commentById(id: $id) {
         replies {
             id,
-            body
+            body,
+            author
         }
     }
 }
