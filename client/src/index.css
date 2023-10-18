@@ -31,6 +31,7 @@ button {
 
 #profileFlexContainer {
     display: flex;
+    flex-wrap: wrap;
     border: thin solid lightblue;
     border-radius: 5px;
     padding: 7px 20px;
@@ -40,7 +41,7 @@ button {
 }
 
 .profileDiv {
-    width: 50%;
+    width: 45%;
     margin: 10px;
 }
 
@@ -103,6 +104,10 @@ button {
 
 @media screen and (max-width: 720px) {
     .conversationContainer {
+        max-width: none;
+        width: 100%;
+    }
+    .profileDiv {
         max-width: none;
         width: 100%;
     }
