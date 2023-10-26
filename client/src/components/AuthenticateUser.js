@@ -13,12 +13,6 @@ export default function AuthenticateUser({ authenticate, createAccount, errors }
     return (
         <>
             <div id='authForms'>
-            <h1>
-                Welcome to Flipside!
-            </h1>
-            <h2>
-                Sign in or create an account
-            </h2>
                 <LoginForm onSubmit={handleLoginSubmit} />
                 <CreateAccountForm onSubmit={handleCreateAccountSubmit} />
             </div>

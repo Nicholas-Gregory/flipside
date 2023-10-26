@@ -44,6 +44,11 @@ export default function LoginForm({ onSubmit }) {
                 </div>
                 <button className='formSubmitButton'>Submit</button>
             </form>
+            <p>
+                Privacy Policy: <br />
+                As this is a test deployment, all data is subject to deletion at any time, and all data can be deleted upon request. <br />
+                No data of any kind will be shared with any other party at any time.
+            </p>
         </div>
     )
 }
